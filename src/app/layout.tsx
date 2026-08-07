@@ -26,7 +26,7 @@ const fraunces = Fraunces({
   axes: ["opsz", "SOFT", "WONK"],
 });
 
-const SITE_URL = "https://vinicius-maitan.vercel.app";
+const SITE_URL = "https://viniciusmaitan.vercel.app";
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
