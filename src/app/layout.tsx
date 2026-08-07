@@ -26,9 +26,25 @@ const fraunces = Fraunces({
   axes: ["opsz", "SOFT", "WONK"],
 });
 
+const SITE_URL = "https://vinicius-maitan-portfolio.vercel.app";
+
 export const metadata: Metadata = {
+  metadataBase: new URL(SITE_URL),
   title: content.en.meta.title,
   description: content.en.meta.description,
+  openGraph: {
+    title: content.en.meta.title,
+    description: content.en.meta.description,
+    url: SITE_URL,
+    siteName: content.en.hero.name,
+    locale: "en_US",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: content.en.meta.title,
+    description: content.en.meta.description,
+  },
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
