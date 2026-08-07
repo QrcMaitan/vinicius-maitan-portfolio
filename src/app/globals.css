@@ -1,0 +1,111 @@
+@import "tailwindcss";
+
+:root {
+  --bone: #f6f4ef;
+  --bone-dim: #efebe2;
+  --stone: #e7e2d6;
+  --carbon: #0b0b0a;
+  --char: #15140f;
+  --ink: #1c1b17;
+  --ink-soft: #5b584e;
+  --chalk: #f1eee6;
+  --chalk-soft: #9c988c;
+  --steel: #3c5468;
+  --steel-soft: #7c93a2;
+  --moss: #4b7a5b;
+  --hairline: rgba(28, 27, 23, 0.14);
+  --hairline-dark: rgba(241, 238, 230, 0.16);
+}
+
+@theme inline {
+  --color-bone: var(--bone);
+  --color-bone-dim: var(--bone-dim);
+  --color-stone: var(--stone);
+  --color-carbon: var(--carbon);
+  --color-char: var(--char);
+  --color-ink: var(--ink);
+  --color-ink-soft: var(--ink-soft);
+  --color-chalk: var(--chalk);
+  --color-chalk-soft: var(--chalk-soft);
+  --color-steel: var(--steel);
+  --color-steel-soft: var(--steel-soft);
+  --color-moss: var(--moss);
+  --color-hairline: var(--hairline);
+  --color-hairline-dark: var(--hairline-dark);
+
+  --font-display: var(--font-fraunces);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  background: var(--bone);
+  color: var(--ink);
+  font-family: var(--font-sans);
+}
+
+::selection {
+  background: var(--steel);
+  color: var(--chalk);
+}
+
+a:focus-visible,
+button:focus-visible,
+[tabindex]:focus-visible {
+  outline: 2px solid var(--steel);
+  outline-offset: 3px;
+}
+
+h1,
+h2,
+h3,
+h4 {
+  text-wrap: balance;
+}
+
+.tabular {
+  font-variant-numeric: tabular-nums;
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: 0% 50%;
+  }
+  100% {
+    background-position: 200% 50%;
+  }
+}
+
+.placeholder-metal {
+  background-image: radial-gradient(120% 100% at 20% 0%, #cfd6da 0%, transparent 55%),
+    linear-gradient(155deg, #8b939a 0%, #464c52 45%, #1c1e21 100%);
+  background-size: 220% 220%;
+  animation: shimmer 16s linear infinite;
+}
+
+.placeholder-paper {
+  background-image: linear-gradient(160deg, var(--stone), var(--bone-dim));
+  background-size: 220% 220%;
+  animation: shimmer 20s linear infinite;
+}
+
+@media (pointer: fine) {
+  a,
+  button {
+    cursor: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(gh auth *)",
+      "Bash(vercel whoami *)",
+      "mcp__a16f735a-5521-4c9e-a866-db1165f6696b__list_teams",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\\\\n\" --max-time 5 \"https://fonts.gstatic.com\")"
+    ]
+  }
+}
