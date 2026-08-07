@@ -8,8 +8,8 @@ export default function Hero() {
   const { t } = useLocale();
 
   return (
-    <section className="border-b border-hairline pt-36 pb-20 md:pt-44 md:pb-28">
-      <div className="mx-auto grid max-w-6xl items-center gap-14 px-6 md:grid-cols-[1.1fr_0.9fr] md:px-10">
+    <section className="flex min-h-screen flex-col justify-center border-b border-hairline pt-28 pb-16 md:pt-32 md:pb-20">
+      <div className="mx-auto grid w-full max-w-6xl items-center gap-14 px-6 md:grid-cols-[1.1fr_0.9fr] md:px-10">
         <div>
           <Reveal>
             <span className="font-mono text-xs uppercase tracking-[0.09em] text-steel">
