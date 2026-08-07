@@ -58,7 +58,7 @@ export default function Cursor() {
     <div aria-hidden className="pointer-events-none fixed inset-0 z-[100]">
       <div
         ref={dotRef}
-        className="fixed left-0 top-0 -translate-x-1/2 -translate-y-1/2 rounded-full bg-ink transition-[width,height,background-color] duration-150 ease-out"
+        className="fixed left-0 top-0 -translate-x-1/2 -translate-y-1/2 rounded-full bg-graphite transition-[width,height,background-color] duration-150 ease-out"
         style={{ width: state === "default" ? 6 : 0, height: state === "default" ? 6 : 0 }}
       />
       <div
@@ -67,7 +67,7 @@ export default function Cursor() {
         style={{
           width: state === "media" ? 84 : state === "link" ? 46 : 28,
           height: state === "media" ? 84 : state === "link" ? 46 : 28,
-          borderColor: state === "default" ? "var(--ink)" : "var(--steel)",
+          borderColor: state === "default" ? "var(--graphite)" : "var(--steel)",
           borderWidth: 1,
           backgroundColor: state === "media" ? "rgba(60,84,104,0.08)" : "transparent",
         }}

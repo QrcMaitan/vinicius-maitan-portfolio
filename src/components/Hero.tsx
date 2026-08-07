@@ -31,7 +31,7 @@ export default function Hero() {
               <a
                 data-cursor="link"
                 href="#experience"
-                className="rounded-sm bg-ink px-6 py-3 font-mono text-xs uppercase tracking-[0.06em] text-bone transition-opacity hover:opacity-85"
+                className="rounded-sm bg-graphite px-6 py-3 font-mono text-xs uppercase tracking-[0.06em] text-bone transition-opacity hover:opacity-85"
               >
                 {t.hero.ctaPrimary}
               </a>
@@ -40,7 +40,7 @@ export default function Hero() {
                 href="/cv.pdf"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="rounded-sm border border-hairline px-6 py-3 font-mono text-xs uppercase tracking-[0.06em] transition-colors hover:border-ink"
+                className="rounded-sm border border-hairline px-6 py-3 font-mono text-xs uppercase tracking-[0.06em] transition-colors hover:border-graphite"
               >
                 {t.hero.ctaSecondary}
               </a>

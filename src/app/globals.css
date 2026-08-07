@@ -6,8 +6,9 @@
   --stone: #e7e2d6;
   --carbon: #0b0b0a;
   --char: #15140f;
-  --ink: #1c1b17;
-  --ink-soft: #5b584e;
+  --ink: #a19e99;
+  --ink-soft: #1c1b17;
+  --graphite: #1c1b17;
   --chalk: #f1eee6;
   --chalk-soft: #9c988c;
   --steel: #3c5468;
@@ -25,6 +26,7 @@
   --color-char: var(--char);
   --color-ink: var(--ink);
   --color-ink-soft: var(--ink-soft);
+  --color-graphite: var(--graphite);
   --color-chalk: var(--chalk);
   --color-chalk-soft: var(--chalk-soft);
   --color-steel: var(--steel);

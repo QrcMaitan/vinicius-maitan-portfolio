@@ -59,11 +59,11 @@ export default function Header() {
             className="flex h-9 w-9 flex-col items-center justify-center gap-1.5"
           >
             <span
-              className="block h-px w-5 bg-ink transition-transform"
+              className="block h-px w-5 bg-graphite transition-transform"
               style={{ transform: open ? "translateY(3.5px) rotate(45deg)" : "none" }}
             />
             <span
-              className="block h-px w-5 bg-ink transition-transform"
+              className="block h-px w-5 bg-graphite transition-transform"
               style={{ transform: open ? "translateY(-3.5px) rotate(-45deg)" : "none" }}
             />
           </button>
