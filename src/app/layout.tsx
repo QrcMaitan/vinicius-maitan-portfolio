@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono, Fraunces } from "next/font/google";
+import { Geist, Geist_Mono, DM_Serif_Text } from "next/font/google";
 import "./globals.css";
 import { LocaleProvider } from "@/lib/locale-context";
 import SmoothScroll from "@/components/SmoothScroll";
@@ -19,11 +19,11 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
-const fraunces = Fraunces({
-  variable: "--font-fraunces",
+const dmSerifText = DM_Serif_Text({
+  variable: "--font-dm-serif",
   subsets: ["latin"],
+  weight: "400",
   style: ["normal", "italic"],
-  axes: ["opsz", "SOFT", "WONK"],
 });
 
 const SITE_URL = "https://viniciusmaitan.vercel.app";
@@ -51,9 +51,9 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html
       lang="en"
-      className={`${geistSans.variable} ${geistMono.variable} ${fraunces.variable} h-full antialiased`}
+      className={`${geistSans.variable} ${geistMono.variable} ${dmSerifText.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col bg-bone text-ink">
+      <body className="min-h-full flex flex-col bg-lg-background text-lg-title">
         <LocaleProvider>
           <Cursor />
           <SmoothScroll>

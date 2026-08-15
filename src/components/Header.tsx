@@ -1,56 +1,73 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { useState } from "react";
-import { motion, useScroll, useTransform, AnimatePresence } from "framer-motion";
+import { AnimatePresence, motion, useScroll, useTransform } from "framer-motion";
 import { useLocale } from "@/lib/locale-context";
+import { useSectionLinkClick } from "@/lib/use-section-link";
+import type { Locale } from "@/lib/content";
 
 export default function Header() {
-  const { t, locale, toggleLocale } = useLocale();
+  const { t, locale, setLocale } = useLocale();
   const [open, setOpen] = useState(false);
+  const handleSectionLink = useSectionLinkClick();
+
   const { scrollY } = useScroll();
   const background = useTransform(
     scrollY,
-    [0, 80],
-    ["rgba(246,244,239,0)", "rgba(246,244,239,0.92)"]
+    [0, 60],
+    ["rgba(246,244,239,0)", "rgba(246,244,239,0.9)"]
   );
-  const borderOpacity = useTransform(scrollY, [0, 80], [0, 1]);
+  const boxShadow = useTransform(
+    scrollY,
+    [0, 60],
+    ["0px 2px 6px rgba(0,0,0,0)", "0px 2px 6px rgba(0,0,0,0.06)"]
+  );
 
   const navItems = [
+    { href: "/#home", label: t.nav.home },
     { href: "/#projects", label: t.nav.projects },
     { href: "/#experience", label: t.nav.experience },
+    { href: "/#faq", label: t.nav.faq },
     { href: "/#contact", label: t.nav.contact },
   ];
 
   return (
     <motion.header
-      style={{ background }}
-      className="fixed inset-x-0 top-0 z-50 backdrop-blur-md"
+      style={{ background, boxShadow }}
+      className="fixed inset-x-0 top-0 z-50"
     >
-      <motion.div
-        style={{ opacity: borderOpacity }}
-        className="absolute inset-x-0 bottom-0 h-px bg-hairline"
-      />
-      <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-5 md:px-10">
-        <Link href="/" data-cursor="link" className="font-display italic text-lg tracking-tight">
-          Vinicius Maitan
+      <div className="mx-auto flex max-w-6xl items-center gap-8 px-6 py-[14px] md:px-10">
+        <Link
+          href="/"
+          data-cursor="link"
+          onClick={handleSectionLink("/")}
+          className="shrink-0 font-display text-[26px] tracking-[-0.58px] text-lg-subtitle"
+        >
+          Maitan
         </Link>
 
-        <nav className="hidden items-center gap-8 md:flex">
-          <ul className="flex items-center gap-8 font-mono text-xs uppercase tracking-[0.08em] text-ink-soft">
-            {navItems.map((item) => (
-              <li key={item.href}>
-                <Link data-cursor="link" href={item.href} className="transition-colors hover:text-ink">
-                  {item.label}
-                </Link>
-              </li>
-            ))}
-          </ul>
-          <LangToggle locale={locale} onToggle={toggleLocale} />
+        <nav className="hidden flex-1 items-center justify-center gap-8 md:flex">
+          {navItems.map((item) => (
+            <Link
+              key={item.href}
+              data-cursor="link"
+              href={item.href}
+              onClick={handleSectionLink(item.href)}
+              className="font-sans text-base tracking-[-0.08px] text-[#919191] transition-colors hover:text-blue-300"
+            >
+              {item.label}
+            </Link>
+          ))}
         </nav>
 
-        <div className="flex items-center gap-4 md:hidden">
-          <LangToggle locale={locale} onToggle={toggleLocale} />
+        <div className="ml-auto hidden shrink-0 md:flex">
+          <LangToggle locale={locale} onSelect={setLocale} />
+        </div>
+
+        <div className="ml-auto flex items-center gap-4 md:hidden">
+          <LangToggle locale={locale} onSelect={setLocale} />
           <button
             data-cursor="link"
             aria-label="Menu"
@@ -59,11 +76,11 @@ export default function Header() {
             className="flex h-9 w-9 flex-col items-center justify-center gap-1.5"
           >
             <span
-              className="block h-px w-5 bg-graphite transition-transform"
+              className="block h-px w-5 bg-lg-subtitle2 transition-transform"
               style={{ transform: open ? "translateY(3.5px) rotate(45deg)" : "none" }}
             />
             <span
-              className="block h-px w-5 bg-graphite transition-transform"
+              className="block h-px w-5 bg-lg-subtitle2 transition-transform"
               style={{ transform: open ? "translateY(-3.5px) rotate(-45deg)" : "none" }}
             />
           </button>
@@ -77,14 +94,17 @@ export default function Header() {
             animate={{ opacity: 1, height: "auto" }}
             exit={{ opacity: 0, height: 0 }}
             transition={{ duration: 0.25, ease: "easeInOut" }}
-            className="overflow-hidden border-t border-hairline bg-bone md:hidden"
+            className="overflow-hidden md:hidden"
           >
-            <ul className="flex flex-col gap-1 px-6 py-6 font-mono text-sm uppercase tracking-[0.08em] text-ink-soft">
+            <ul className="flex flex-col gap-1 border-t border-lg-divider bg-lg-background px-6 py-6 font-sans text-base text-[#919191]">
               {navItems.map((item) => (
                 <li key={item.href}>
                   <Link
                     href={item.href}
-                    onClick={() => setOpen(false)}
+                    onClick={(e) => {
+                      handleSectionLink(item.href)(e);
+                      setOpen(false);
+                    }}
                     className="block py-3"
                   >
                     {item.label}
@@ -99,17 +119,53 @@ export default function Header() {
   );
 }
 
-function LangToggle({ locale, onToggle }: { locale: "en" | "pt"; onToggle: () => void }) {
+function LangToggle({
+  locale,
+  onSelect,
+}: {
+  locale: Locale;
+  onSelect: (locale: Locale) => void;
+}) {
   return (
-    <button
-      data-cursor="link"
-      onClick={onToggle}
-      aria-label="Toggle language"
-      className="flex items-center gap-1.5 rounded-full border border-hairline px-3 py-1.5 font-mono text-xs tracking-[0.05em]"
-    >
-      <span className={locale === "en" ? "text-ink" : "text-ink-soft"}>EN</span>
-      <span className="text-ink-soft">—</span>
-      <span className={locale === "pt" ? "text-ink" : "text-ink-soft"}>PT</span>
-    </button>
+    <div className="flex items-center gap-1 rounded-[40px] bg-[rgba(136,146,156,0.06)] p-1">
+      <button
+        data-cursor="link"
+        type="button"
+        aria-label="English"
+        aria-pressed={locale === "en"}
+        onClick={() => onSelect("en")}
+        className={`flex items-center justify-center rounded-full px-3 py-1.5 transition-colors ${
+          locale === "en" ? "bg-white" : ""
+        }`}
+      >
+        <Image
+          src="/images/header/flag-us.png"
+          alt=""
+          width={24}
+          height={16}
+          draggable={false}
+          className="rounded-[1px]"
+        />
+      </button>
+      <button
+        data-cursor="link"
+        type="button"
+        aria-label="Português"
+        aria-pressed={locale === "pt"}
+        onClick={() => onSelect("pt")}
+        className={`flex items-center justify-center rounded-full px-3 py-1.5 transition-colors ${
+          locale === "pt" ? "bg-white" : ""
+        }`}
+      >
+        <Image
+          src="/images/header/flag-br.png"
+          alt=""
+          width={24}
+          height={16}
+          draggable={false}
+          className="rounded-[1px]"
+        />
+      </button>
+    </div>
   );
 }

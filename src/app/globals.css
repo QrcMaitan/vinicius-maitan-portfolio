@@ -1,41 +1,63 @@
 @import "tailwindcss";
 
 :root {
-  --bone: #f6f4ef;
+  /* Base clara (lg) */
+  --lg-background: #f6f4ef;
+  --lg-background2: #f9f9f9;
+  --lg-title: #a19e99;
+  --lg-subtitle: #838180;
+  --lg-subtitle2: #1c1b17;
+  --lg-divider: #e7e2d6;
+
+  /* Base escura (dk) */
+  --dk-background: #0b0b0a;
+  --dk-title: #f1eee6;
+  --dk-subtitle: #9c988c;
+  --dk-subtitle2: #f1eee6;
+  --dk-divider: #e7e2d6;
+
+  /* Geral */
+  --blue-100: #7c93a2;
+  --blue-200: #3c5468;
+  --blue-300: #3c5468;
+  --divider: #e7e2d6;
+
+  /* Auxiliares — não fazem parte da referência de paleta, mas sustentam a UI */
   --bone-dim: #efebe2;
-  --stone: #e7e2d6;
-  --carbon: #0b0b0a;
   --char: #15140f;
-  --ink: #a19e99;
-  --ink-soft: #1c1b17;
   --graphite: #1c1b17;
-  --chalk: #f1eee6;
-  --chalk-soft: #9c988c;
-  --steel: #3c5468;
-  --steel-soft: #7c93a2;
   --moss: #4b7a5b;
   --hairline: rgba(28, 27, 23, 0.14);
   --hairline-dark: rgba(241, 238, 230, 0.16);
 }
 
 @theme inline {
-  --color-bone: var(--bone);
+  --color-lg-background: var(--lg-background);
+  --color-lg-background2: var(--lg-background2);
+  --color-lg-title: var(--lg-title);
+  --color-lg-subtitle: var(--lg-subtitle);
+  --color-lg-subtitle2: var(--lg-subtitle2);
+  --color-lg-divider: var(--lg-divider);
+
+  --color-dk-background: var(--dk-background);
+  --color-dk-title: var(--dk-title);
+  --color-dk-subtitle: var(--dk-subtitle);
+  --color-dk-subtitle2: var(--dk-subtitle2);
+  --color-dk-divider: var(--dk-divider);
+
+  --color-blue-100: var(--blue-100);
+  --color-blue-200: var(--blue-200);
+  --color-blue-300: var(--blue-300);
+  --color-divider: var(--divider);
+
   --color-bone-dim: var(--bone-dim);
-  --color-stone: var(--stone);
-  --color-carbon: var(--carbon);
   --color-char: var(--char);
-  --color-ink: var(--ink);
-  --color-ink-soft: var(--ink-soft);
   --color-graphite: var(--graphite);
-  --color-chalk: var(--chalk);
-  --color-chalk-soft: var(--chalk-soft);
-  --color-steel: var(--steel);
-  --color-steel-soft: var(--steel-soft);
   --color-moss: var(--moss);
   --color-hairline: var(--hairline);
   --color-hairline-dark: var(--hairline-dark);
 
-  --font-display: var(--font-fraunces);
+  --font-display: var(--font-dm-serif);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 }
@@ -44,21 +66,26 @@
   box-sizing: border-box;
 }
 
+img {
+  -webkit-user-drag: none;
+  user-drag: none;
+}
+
 body {
-  background: var(--bone);
-  color: var(--ink);
+  background: var(--lg-background);
+  color: var(--lg-title);
   font-family: var(--font-sans);
 }
 
 ::selection {
-  background: var(--steel);
-  color: var(--chalk);
+  background: var(--blue-200);
+  color: var(--dk-title);
 }
 
 a:focus-visible,
 button:focus-visible,
 [tabindex]:focus-visible {
-  outline: 2px solid var(--steel);
+  outline: 2px solid var(--blue-200);
   outline-offset: 3px;
 }
 
@@ -82,6 +109,32 @@ h4 {
   }
 }
 
+@keyframes marquee {
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+@utility animate-marquee {
+  animation: marquee 42s linear infinite;
+}
+
+@keyframes hero-tool-float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-8px);
+  }
+}
+
+.hero-tool-float {
+  animation-name: hero-tool-float;
+  animation-timing-function: ease-in-out;
+  animation-iteration-count: infinite;
+}
+
 .placeholder-metal {
   background-image: radial-gradient(120% 100% at 20% 0%, #cfd6da 0%, transparent 55%),
     linear-gradient(155deg, #8b939a 0%, #464c52 45%, #1c1e21 100%);
@@ -90,14 +143,13 @@ h4 {
 }
 
 .placeholder-paper {
-  background-image: linear-gradient(160deg, var(--stone), var(--bone-dim));
+  background-image: linear-gradient(160deg, var(--lg-divider), var(--bone-dim));
   background-size: 220% 220%;
   animation: shimmer 20s linear infinite;
 }
 
 @media (pointer: fine) {
-  a,
-  button {
+  * {
     cursor: none;
   }
 }

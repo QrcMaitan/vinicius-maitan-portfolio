@@ -6,22 +6,23 @@ import { content, type Content, type Locale } from "./content";
 type LocaleContextValue = {
   locale: Locale;
   toggleLocale: () => void;
+  setLocale: (locale: Locale) => void;
   t: Content;
 };
 
 const LocaleContext = createContext<LocaleContextValue | null>(null);
 
 export function LocaleProvider({ children }: { children: ReactNode }) {
-  const [locale, setLocale] = useState<Locale>("en");
+  const [locale, setLocaleState] = useState<Locale>("en");
 
   useEffect(() => {
     document.documentElement.lang = locale;
   }, [locale]);
 
-  const toggleLocale = () => setLocale((current) => (current === "en" ? "pt" : "en"));
+  const toggleLocale = () => setLocaleState((current) => (current === "en" ? "pt" : "en"));
 
   return (
-    <LocaleContext.Provider value={{ locale, toggleLocale, t: content[locale] }}>
+    <LocaleContext.Provider value={{ locale, toggleLocale, setLocale: setLocaleState, t: content[locale] }}>
       {children}
     </LocaleContext.Provider>
   );

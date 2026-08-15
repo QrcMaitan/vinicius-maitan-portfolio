@@ -1,32 +1,48 @@
 "use client";
 
+import Image from "next/image";
 import { useLocale } from "@/lib/locale-context";
 import Reveal from "./Reveal";
+
+const CARD_IMAGES = [
+  "/images/cross-platform/desktop.png",
+  "/images/cross-platform/mobile.png",
+  "/images/cross-platform/web.png",
+];
 
 export default function CrossPlatform() {
   const { t } = useLocale();
 
   return (
-    <section className="border-b border-hairline py-24 md:py-32">
-      <div className="mx-auto max-w-6xl px-6 md:px-10">
-        <div className="mb-14 flex flex-wrap items-end justify-between gap-6">
-          <div>
-            <span className="font-mono text-xs uppercase tracking-[0.08em] text-ink-soft">
-              {t.cross.eyebrow}
-            </span>
-            <h2 className="mt-2 font-display text-3xl font-normal md:text-4xl">{t.cross.title}</h2>
-          </div>
-        </div>
+    <section
+      id="cross-platform"
+      data-scroll-snap
+      className="flex min-h-screen flex-col justify-center border-b border-hairline bg-lg-background2"
+    >
+      <div className="mx-auto w-full max-w-6xl px-6 py-24 md:px-10 md:py-24">
+        <Reveal className="mx-auto mb-10 flex max-w-xl flex-col items-center gap-3 text-center md:mb-12">
+          <span className="font-mono text-xs uppercase tracking-[0.08em] text-lg-subtitle">
+            {t.cross.eyebrow}
+          </span>
+          <h2 className="font-display text-3xl font-normal md:text-4xl">{t.cross.title}</h2>
+        </Reveal>
 
-        <div className="grid gap-px overflow-hidden rounded-md border border-hairline bg-hairline md:grid-cols-3">
+        <div className="grid gap-8 md:grid-cols-3">
           {t.cross.items.map((item, i) => (
-            <Reveal key={item.tag} delay={i * 0.06} className="bg-bone">
-              <div className="h-full p-8 transition-colors hover:bg-bone-dim">
-                <span className="font-mono text-[11px] uppercase tracking-[0.06em] text-steel">
-                  {item.tag}
-                </span>
-                <h3 className="mt-3 font-display text-xl">{item.title}</h3>
-                <p className="mt-3 text-sm leading-relaxed text-ink-soft">{item.description}</p>
+            <Reveal key={item.tag} delay={i * 0.06} className="flex flex-col gap-6">
+              <div className="relative aspect-[352/356] w-full overflow-hidden rounded-2xl">
+                <Image
+                  src={CARD_IMAGES[i]}
+                  alt=""
+                  fill
+                  sizes="(min-width: 768px) 33vw, 100vw"
+                  draggable={false}
+                  className="object-cover"
+                />
+              </div>
+              <div className="flex flex-col gap-2">
+                <h3 className="font-display text-2xl text-lg-title">{item.title}</h3>
+                <p className="text-lg leading-relaxed text-lg-subtitle">{item.description}</p>
               </div>
             </Reveal>
           ))}

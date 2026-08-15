@@ -22,7 +22,7 @@ export default function MediaPlaceholder({
       <div className={`absolute inset-0 ${variant === "metal" ? "placeholder-metal" : "placeholder-paper"}`} />
       <span
         className={`absolute bottom-3 left-4 font-mono text-[10px] uppercase tracking-[0.06em] ${
-          variant === "metal" ? "text-white/70" : "text-ink-soft"
+          variant === "metal" ? "text-white/70" : "text-lg-subtitle2"
         }`}
       >
         {label}

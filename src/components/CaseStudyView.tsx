@@ -1,9 +1,10 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { useLocale } from "@/lib/locale-context";
-import MediaPlaceholder from "./MediaPlaceholder";
+import type { CaseStudyBlock, CaseStudyImage } from "@/lib/content";
 import Reveal from "./Reveal";
 
 export default function CaseStudyView({ slug }: { slug: string }) {
@@ -14,44 +15,34 @@ export default function CaseStudyView({ slug }: { slug: string }) {
   if (!project) notFound();
 
   return (
-    <main className="flex-1 pt-36 pb-24 md:pt-44 md:pb-32">
-      <div className="mx-auto max-w-5xl px-6 md:px-10">
+    <main className="flex-1 bg-lg-background2 pt-36 pb-24 md:pt-44 md:pb-32">
+      <div className="mx-auto max-w-3xl px-6 md:px-10">
         <Reveal>
           <Link
             data-cursor="link"
             href="/#projects"
-            className="font-mono text-xs uppercase tracking-[0.06em] text-ink-soft transition-colors hover:text-ink"
+            className="font-mono text-xs uppercase tracking-[0.06em] text-lg-subtitle2 transition-colors hover:text-lg-title"
           >
             ← {t.caseStudy.back}
           </Link>
         </Reveal>
 
         <Reveal delay={0.05}>
-          <div className="mt-10 flex flex-wrap gap-x-10 gap-y-3 font-mono text-xs uppercase tracking-[0.05em] text-ink-soft">
-            <span>
-              {t.caseStudy.client} — {project.client}
-            </span>
-            <span>
-              {t.caseStudy.role} — {project.role}
-            </span>
-            <span>
-              {t.caseStudy.year} — {project.year}
-            </span>
-          </div>
+          <span className="mt-10 block font-mono text-xs uppercase tracking-[0.08em] text-blue-200">
+            {project.client}
+          </span>
         </Reveal>
 
-        <Reveal delay={0.1}>
-          <h1 className="mt-6 max-w-3xl font-display text-[clamp(2.2rem,5vw,3.6rem)] font-light leading-[1.05]">
-            {project.title}
-          </h1>
+        <Reveal delay={0.08}>
+          <p className="mt-3 text-lg leading-relaxed text-lg-subtitle2">{project.tagline}</p>
         </Reveal>
 
-        <Reveal delay={0.15}>
-          <div className="mt-6 flex flex-wrap gap-2">
+        <Reveal delay={0.11}>
+          <div className="mt-5 flex flex-wrap gap-2">
             {project.tags.map((tag) => (
               <span
                 key={tag}
-                className="rounded-full border border-hairline px-3 py-1 font-mono text-[10px] uppercase tracking-[0.05em] text-ink-soft"
+                className="rounded-full border border-hairline px-3 py-1 font-mono text-[10px] uppercase tracking-[0.05em] text-lg-subtitle2"
               >
                 {tag}
               </span>
@@ -59,53 +50,274 @@ export default function CaseStudyView({ slug }: { slug: string }) {
           </div>
         </Reveal>
 
-        <Reveal delay={0.2} className="mt-12">
-          <MediaPlaceholder ratio="16 / 8" variant="paper" label="Project screen — replace with real capture" />
+        <Reveal delay={0.14}>
+          <h1 className="mt-8 font-display text-[clamp(2rem,4.5vw,3.2rem)] font-light leading-[1.08] text-lg-title">
+            {project.title}
+          </h1>
         </Reveal>
 
-        <div className="mt-16 grid gap-14 md:grid-cols-[1fr_1.4fr]">
-          <Reveal>
-            <div>
-              <h2 className="font-mono text-xs uppercase tracking-[0.06em] text-steel">
-                {t.caseStudy.overview}
-              </h2>
-              <p className="mt-4 text-lg leading-relaxed text-ink-soft">{project.description}</p>
-            </div>
-          </Reveal>
+        <Reveal delay={0.17}>
+          <p className="mt-5 text-base leading-relaxed text-lg-subtitle2">{project.description}</p>
+        </Reveal>
 
-          <Reveal delay={0.06}>
-            <div>
-              <h2 className="font-mono text-xs uppercase tracking-[0.06em] text-steel">
-                {t.caseStudy.highlights}
-              </h2>
-              <ul className="mt-4 flex flex-col gap-3">
-                {project.highlights.map((item) => (
-                  <li key={item} className="flex gap-3 text-sm leading-relaxed text-ink-soft">
-                    <span className="mt-2 h-1 w-1 shrink-0 rounded-full bg-steel" />
-                    {item}
-                  </li>
-                ))}
-              </ul>
+        <Reveal delay={0.2}>
+          <div className="mt-10 grid grid-cols-2 gap-x-6 gap-y-6 border-y border-hairline py-8 md:grid-cols-4">
+            {project.meta.map((group) => (
+              <div key={group.label}>
+                <span className="font-mono text-[11px] uppercase tracking-[0.06em] text-blue-200">
+                  {group.label}
+                </span>
+                <div className="mt-2 flex flex-col gap-1">
+                  {group.values.map((value) => (
+                    <span key={value} className="text-sm leading-snug text-lg-subtitle2">
+                      {value}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            ))}
+          </div>
+        </Reveal>
+
+        <Reveal delay={0.24} className="mt-12">
+          {project.slug === "tractian" ? (
+            <TractianHero heroImage={project.heroImage} />
+          ) : (
+            <div
+              data-cursor="media"
+              className="relative overflow-hidden rounded-md"
+              style={{ aspectRatio: `${project.heroImage.width} / ${project.heroImage.height}` }}
+            >
+              <Image
+                src={project.heroImage.src}
+                alt={project.heroImage.alt}
+                width={project.heroImage.width}
+                height={project.heroImage.height}
+                priority
+                className="h-full w-full object-cover"
+              />
             </div>
-          </Reveal>
-        </div>
+          )}
+        </Reveal>
+
+        {project.blocks.map((block, i) => (
+          <CaseStudyBlockView key={i} block={block} />
+        ))}
 
         {next && (
           <Reveal delay={0.1} className="mt-24 border-t border-hairline pt-10">
-            <Link data-cursor="link" href={`/projects/${next.slug}`} className="group flex items-baseline justify-between gap-6">
+            <Link
+              data-cursor="link"
+              href={`/projects/${next.slug}`}
+              className="group flex items-baseline justify-between gap-6"
+            >
               <div>
-                <span className="font-mono text-xs uppercase tracking-[0.06em] text-ink-soft">
+                <span className="font-mono text-xs uppercase tracking-[0.06em] text-lg-subtitle2">
                   {t.caseStudy.next}
                 </span>
-                <h3 className="mt-2 font-display text-2xl transition-colors group-hover:text-steel">
+                <h3 className="mt-2 font-display text-2xl text-lg-title transition-colors group-hover:text-blue-200">
                   {next.title}
                 </h3>
               </div>
-              <span className="font-mono text-xs uppercase tracking-[0.05em] text-steel-soft">→</span>
+              <span className="font-mono text-xs uppercase tracking-[0.05em] text-blue-100">→</span>
             </Link>
           </Reveal>
         )}
       </div>
     </main>
   );
+}
+
+function TractianHero({ heroImage }: { heroImage: CaseStudyImage }) {
+  return (
+    <div
+      data-cursor="media"
+      className="relative overflow-hidden rounded-md"
+      style={{ aspectRatio: `${heroImage.width} / ${heroImage.height}` }}
+    >
+      <Image
+        src={heroImage.src}
+        alt={heroImage.alt}
+        width={heroImage.width}
+        height={heroImage.height}
+        priority
+        className="h-full w-full object-cover"
+      />
+      <div className="absolute bottom-[6%] left-[3%] w-[38%] min-w-[140px] overflow-hidden rounded-md shadow-lg">
+        <Image
+          src="/images/tractian/hero-card.png"
+          alt="Failure insight card with a Danger to Normal severity scale"
+          width={800}
+          height={695}
+          className="w-full"
+        />
+      </div>
+      <div className="absolute right-[2%] top-1/2 hidden w-[42%] min-w-[160px] -translate-y-1/2 sm:block">
+        <Image
+          src="/images/tractian/hero-phone.png"
+          alt="Two hands holding a Tractian sensor and a phone showing the health level of an asset"
+          width={900}
+          height={527}
+          className="w-full"
+        />
+      </div>
+    </div>
+  );
+}
+
+function CaseStudyBlockView({ block }: { block: CaseStudyBlock }) {
+  switch (block.type) {
+    case "text": {
+      const isSection = Boolean(block.eyebrow);
+      return (
+        <Reveal>
+          <div className={isSection ? "mt-16 border-t border-hairline pt-12" : "mt-8"}>
+            {block.eyebrow && (
+              <span className="font-mono text-xs uppercase tracking-[0.08em] text-blue-200">
+                {block.eyebrow}
+              </span>
+            )}
+            {block.title && (
+              <h2
+                className={
+                  block.eyebrow
+                    ? "mt-2 font-display text-2xl font-normal text-lg-title md:text-3xl"
+                    : "font-display text-xl font-normal text-lg-title"
+                }
+              >
+                {block.title}
+              </h2>
+            )}
+            {block.paragraphs.map((p, i) => (
+              <p
+                key={i}
+                className={`text-base leading-relaxed text-lg-subtitle2 ${
+                  i === 0 && (block.eyebrow || block.title) ? "mt-4" : "mt-4 first:mt-0"
+                }`}
+              >
+                {p}
+              </p>
+            ))}
+          </div>
+        </Reveal>
+      );
+    }
+
+    case "stats": {
+      const cols = block.items.length >= 4 ? "md:grid-cols-4" : "md:grid-cols-3";
+      return (
+        <Reveal>
+          <div className={`mt-8 grid grid-cols-2 overflow-hidden rounded-md border border-hairline ${cols}`}>
+            {block.items.map((item, i) => (
+              <div
+                key={item.label}
+                className={`p-6 ${i > 0 ? "border-l border-hairline" : ""} ${
+                  i === 2 ? "border-t border-hairline md:border-t-0" : ""
+                } ${i === 3 ? "border-t border-hairline md:border-t-0" : ""}`}
+              >
+                <div className="tabular font-display text-3xl text-lg-title">{item.value}</div>
+                <div className="mt-2 font-mono text-[11px] uppercase tracking-[0.05em] text-lg-subtitle2">
+                  {item.label}
+                </div>
+              </div>
+            ))}
+          </div>
+        </Reveal>
+      );
+    }
+
+    case "quote":
+      return (
+        <Reveal>
+          <div className="mt-12 rounded-md border border-hairline p-8 text-center md:p-10">
+            <div className="flex flex-wrap items-center justify-center gap-3 font-mono text-[11px] uppercase tracking-[0.06em] text-blue-200">
+              <span>{block.tagTop}</span>
+              <span className="text-lg-subtitle2">→</span>
+              <span>{block.tagBottom}</span>
+            </div>
+            <p className="mt-5 font-display text-xl italic leading-snug text-lg-title md:text-2xl">
+              “{block.text}”
+            </p>
+          </div>
+        </Reveal>
+      );
+
+    case "grid":
+      return (
+        <Reveal>
+          <div className="mt-8 grid gap-x-10 gap-y-8 md:grid-cols-2">
+            {block.items.map((item) => (
+              <div key={item.title}>
+                <h4 className="font-display text-lg text-lg-title">{item.title}</h4>
+                <p className="mt-2 text-sm leading-relaxed text-lg-subtitle2">{item.description}</p>
+              </div>
+            ))}
+          </div>
+        </Reveal>
+      );
+
+    case "chain":
+      return (
+        <Reveal>
+          <div className="mt-8 flex flex-wrap items-center gap-3">
+            {block.items.map((item, i) => (
+              <div key={item} className="flex items-center gap-3">
+                <span className="rounded-full border border-hairline px-3 py-1.5 font-mono text-[11px] uppercase tracking-[0.05em] text-lg-subtitle2">
+                  {item}
+                </span>
+                {i < block.items.length - 1 && <span className="text-blue-200">→</span>}
+              </div>
+            ))}
+          </div>
+        </Reveal>
+      );
+
+    case "image":
+      return (
+        <Reveal>
+          <div className={`mt-8 grid gap-4 ${block.images.length > 1 ? "sm:grid-cols-2" : ""}`}>
+            {block.images.map((image) => (
+              <div
+                key={image.src}
+                data-cursor="media"
+                className="overflow-hidden rounded-md"
+                style={{ aspectRatio: `${image.width} / ${image.height}` }}
+              >
+                <Image
+                  src={image.src}
+                  alt={image.alt}
+                  width={image.width}
+                  height={image.height}
+                  className="h-full w-full object-cover"
+                />
+              </div>
+            ))}
+          </div>
+        </Reveal>
+      );
+
+    case "cta":
+      return (
+        <Reveal>
+          <div className="mt-16 rounded-md border border-hairline p-8 md:p-10">
+            <span className="font-mono text-xs uppercase tracking-[0.08em] text-blue-200">
+              {block.eyebrow}
+            </span>
+            <h3 className="mt-2 font-display text-xl text-lg-title md:text-2xl">{block.title}</h3>
+            <a
+              data-cursor="link"
+              href={block.href}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="mt-6 inline-block rounded-sm bg-blue-300 px-6 py-3 font-mono text-xs uppercase tracking-[0.06em] text-lg-background transition-opacity hover:opacity-85"
+            >
+              {block.buttonLabel}
+            </a>
+          </div>
+        </Reveal>
+      );
+
+    default:
+      return null;
+  }
 }

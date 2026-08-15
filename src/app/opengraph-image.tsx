@@ -8,7 +8,8 @@ export const contentType = "image/png";
 
 export default async function OpengraphImage() {
   const { hero } = content.en;
-  const fraunces = await readFile(join(process.cwd(), "src/assets/fonts/fraunces-normal.ttf"));
+  const dmSerif = await readFile(join(process.cwd(), "src/assets/fonts/dmserif-normal.ttf"));
+  const geist = await readFile(join(process.cwd(), "src/assets/fonts/geist-500.ttf"));
 
   return new ImageResponse(
     (
@@ -30,7 +31,7 @@ export default async function OpengraphImage() {
             letterSpacing: "1px",
             textTransform: "uppercase",
             color: "#3c5468",
-            fontFamily: "Consolas, monospace",
+            fontFamily: "Geist",
           }}
         >
           {hero.kicker}
@@ -42,8 +43,8 @@ export default async function OpengraphImage() {
               display: "flex",
               fontSize: 108,
               lineHeight: 1,
-              color: "#1c1b17",
-              fontFamily: "Fraunces",
+              color: "#a19e99",
+              fontFamily: "DM Serif Text",
             }}
           >
             {hero.name}
@@ -55,8 +56,8 @@ export default async function OpengraphImage() {
               fontSize: 28,
               maxWidth: 820,
               lineHeight: 1.4,
-              color: "#5b584e",
-              fontFamily: "Verdana, sans-serif",
+              color: "#838180",
+              fontFamily: "Geist",
             }}
           >
             {hero.subtitle}
@@ -64,6 +65,12 @@ export default async function OpengraphImage() {
         </div>
       </div>
     ),
-    { ...size, fonts: [{ name: "Fraunces", data: fraunces, style: "normal", weight: 400 }] }
+    {
+      ...size,
+      fonts: [
+        { name: "DM Serif Text", data: dmSerif, style: "normal", weight: 400 },
+        { name: "Geist", data: geist, style: "normal", weight: 500 },
+      ],
+    }
   );
 }
