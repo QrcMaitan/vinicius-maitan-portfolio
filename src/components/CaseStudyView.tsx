@@ -3,9 +3,11 @@
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { useState } from "react";
 import { useLocale } from "@/lib/locale-context";
-import type { CaseStudyBlock, CaseStudyImage } from "@/lib/content";
+import type { CaseStudyBlock } from "@/lib/content";
 import Reveal from "./Reveal";
+import PrototypeDrawer from "./PrototypeDrawer";
 
 export default function CaseStudyView({ slug }: { slug: string }) {
   const { t } = useLocale();
@@ -80,24 +82,20 @@ export default function CaseStudyView({ slug }: { slug: string }) {
         </Reveal>
 
         <Reveal delay={0.24} className="mt-12">
-          {project.slug === "tractian" ? (
-            <TractianHero heroImage={project.heroImage} />
-          ) : (
-            <div
-              data-cursor="media"
-              className="relative overflow-hidden rounded-md"
-              style={{ aspectRatio: `${project.heroImage.width} / ${project.heroImage.height}` }}
-            >
-              <Image
-                src={project.heroImage.src}
-                alt={project.heroImage.alt}
-                width={project.heroImage.width}
-                height={project.heroImage.height}
-                priority
-                className="h-full w-full object-cover"
-              />
-            </div>
-          )}
+          <div
+            data-cursor="media"
+            className="relative overflow-hidden rounded-md"
+            style={{ aspectRatio: `${project.heroImage.width} / ${project.heroImage.height}` }}
+          >
+            <Image
+              src={project.heroImage.src}
+              alt={project.heroImage.alt}
+              width={project.heroImage.width}
+              height={project.heroImage.height}
+              priority
+              className="h-full w-full object-cover"
+            />
+          </div>
         </Reveal>
 
         {project.blocks.map((block, i) => (
@@ -125,43 +123,6 @@ export default function CaseStudyView({ slug }: { slug: string }) {
         )}
       </div>
     </main>
-  );
-}
-
-function TractianHero({ heroImage }: { heroImage: CaseStudyImage }) {
-  return (
-    <div
-      data-cursor="media"
-      className="relative overflow-hidden rounded-md"
-      style={{ aspectRatio: `${heroImage.width} / ${heroImage.height}` }}
-    >
-      <Image
-        src={heroImage.src}
-        alt={heroImage.alt}
-        width={heroImage.width}
-        height={heroImage.height}
-        priority
-        className="h-full w-full object-cover"
-      />
-      <div className="absolute bottom-[6%] left-[3%] w-[38%] min-w-[140px] overflow-hidden rounded-md shadow-lg">
-        <Image
-          src="/images/tractian/hero-card.png"
-          alt="Failure insight card with a Danger to Normal severity scale"
-          width={800}
-          height={695}
-          className="w-full"
-        />
-      </div>
-      <div className="absolute right-[2%] top-1/2 hidden w-[42%] min-w-[160px] -translate-y-1/2 sm:block">
-        <Image
-          src="/images/tractian/hero-phone.png"
-          alt="Two hands holding a Tractian sensor and a phone showing the health level of an asset"
-          width={900}
-          height={527}
-          className="w-full"
-        />
-      </div>
-    </div>
   );
 }
 
@@ -297,13 +258,32 @@ function CaseStudyBlockView({ block }: { block: CaseStudyBlock }) {
       );
 
     case "cta":
-      return (
-        <Reveal>
-          <div className="mt-16 rounded-md border border-hairline p-8 md:p-10">
-            <span className="font-mono text-xs uppercase tracking-[0.08em] text-blue-200">
-              {block.eyebrow}
-            </span>
-            <h3 className="mt-2 font-display text-xl text-lg-title md:text-2xl">{block.title}</h3>
+      return <CtaBlock block={block} />;
+
+    default:
+      return null;
+  }
+}
+
+function CtaBlock({ block }: { block: Extract<CaseStudyBlock, { type: "cta" }> }) {
+  const [prototypeOpen, setPrototypeOpen] = useState(false);
+
+  return (
+    <>
+      <Reveal>
+        <div className="mt-16 rounded-md border border-hairline p-8 md:p-10">
+          <span className="font-mono text-xs uppercase tracking-[0.08em] text-blue-200">{block.eyebrow}</span>
+          <h3 className="mt-2 font-display text-xl text-lg-title md:text-2xl">{block.title}</h3>
+          {block.prototypeEmbedUrl ? (
+            <button
+              type="button"
+              data-cursor="link"
+              onClick={() => setPrototypeOpen(true)}
+              className="mt-6 inline-block rounded-sm bg-blue-300 px-6 py-3 font-mono text-xs uppercase tracking-[0.06em] text-lg-background transition-opacity hover:opacity-85"
+            >
+              {block.buttonLabel}
+            </button>
+          ) : (
             <a
               data-cursor="link"
               href={block.href}
@@ -313,11 +293,17 @@ function CaseStudyBlockView({ block }: { block: CaseStudyBlock }) {
             >
               {block.buttonLabel}
             </a>
-          </div>
-        </Reveal>
-      );
+          )}
+        </div>
+      </Reveal>
 
-    default:
-      return null;
-  }
+      {block.prototypeEmbedUrl && (
+        <PrototypeDrawer
+          open={prototypeOpen}
+          onClose={() => setPrototypeOpen(false)}
+          embedUrl={block.prototypeEmbedUrl}
+        />
+      )}
+    </>
+  );
 }

@@ -19,7 +19,7 @@ export type CaseStudyBlock =
   | { type: "quote"; tagTop: string; tagBottom: string; text: string }
   | { type: "grid"; items: { title: string; description: string }[] }
   | { type: "chain"; items: string[] }
-  | { type: "cta"; eyebrow: string; title: string; buttonLabel: string; href: string }
+  | { type: "cta"; eyebrow: string; title: string; buttonLabel: string; href: string; prototypeEmbedUrl?: string }
   | { type: "image"; images: CaseStudyImage[] };
 
 export type Project = {
@@ -102,11 +102,8 @@ export type Content = {
   faq: {
     eyebrow: string;
     title: string;
-    subtitle: string;
-    contactPrefix: string;
-    contactLinkLabel: string;
-    contactSuffix: string;
     items: { question: string; answer: string }[];
+    callCard: { eyebrow: string; title: string; description: string; buttonLabel: string };
   };
   contact: {
     title: string;
@@ -130,6 +127,9 @@ export type Content = {
     next: string;
   };
 };
+
+const TRACTIAN_PROTOTYPE_EMBED_URL =
+  "https://embed.figma.com/proto/0KHJjQGd0S1FyLqg266ZS2/Asset-Prioritization?node-id=162334-15886&viewport=1818%2C-1414%2C0.56&scaling=contain&content-scaling=fixed&starting-point-node-id=162334%3A15886&show-proto-sidebar=35%3A24906&&page-id=35%3A24906&embed-host=share";
 
 export const content: Record<Locale, Content> = {
   en: {
@@ -224,8 +224,8 @@ export const content: Record<Locale, Content> = {
           heroImage: {
             src: "/images/tractian/hero-bg.png",
             alt: "Industrial plant seen through the office window, with the Tractian mobile app and a failure insight card overlaid",
-            width: 1800,
-            height: 775,
+            width: 3796,
+            height: 1760,
           },
           cardImage: {
             src: "/images/tractian/project-card-v2.png",
@@ -243,12 +243,14 @@ export const content: Record<Locale, Content> = {
               ],
             },
             {
-              type: "stats",
-              items: [
-                { value: "176", label: "Normal" },
-                { value: "6", label: "Observe" },
-                { value: "4", label: "Warning" },
-                { value: "2", label: "Danger" },
+              type: "image",
+              images: [
+                {
+                  src: "/images/tractian/status-cards.png",
+                  alt: "Equipment status counts: 176 Normal, 6 Observe, 4 Warning, 2 Danger",
+                  width: 7517,
+                  height: 877,
+                },
               ],
             },
             {
@@ -440,12 +442,6 @@ export const content: Record<Locale, Content> = {
                   width: 1600,
                   height: 725,
                 },
-                {
-                  src: "/images/tractian/ecosystem-mobile.png",
-                  alt: "The redesigned Overview shown on the mobile app",
-                  width: 537,
-                  height: 800,
-                },
               ],
             },
             {
@@ -454,6 +450,7 @@ export const content: Record<Locale, Content> = {
               title: "Navigable mobile prototype — designed to ensure precision in the smallest details",
               buttonLabel: "View prototype",
               href: "https://viniciusmaitan.figma.site/prototype",
+              prototypeEmbedUrl: TRACTIAN_PROTOTYPE_EMBED_URL,
             },
           ],
         },
@@ -478,8 +475,8 @@ export const content: Record<Locale, Content> = {
           heroImage: {
             src: "/images/plific/hero.png",
             alt: "Delivery worker on a bike in front of an office building, with three Plific app screens overlaid",
-            width: 1900,
-            height: 406,
+            width: 3796,
+            height: 1760,
           },
           cardImage: {
             src: "/images/plific/project-card-v2.png",
@@ -690,17 +687,6 @@ export const content: Record<Locale, Content> = {
               buttonLabel: "Access",
               href: "https://plific.vercel.app/",
             },
-            {
-              type: "image",
-              images: [
-                {
-                  src: "/images/plific/final-product.png",
-                  alt: "The finished Plific landing page and platform screens, dark hero and light onboarding steps",
-                  width: 1800,
-                  height: 1177,
-                },
-              ],
-            },
           ],
         },
       ],
@@ -779,36 +765,38 @@ export const content: Record<Locale, Content> = {
     },
     faq: {
       eyebrow: "FAQ",
-      title: "Frequently asked questions",
-      subtitle: "Everything you need to know before we start working together.",
-      contactPrefix: "Can't find what you're looking for? Reach out ",
-      contactLinkLabel: "directly",
-      contactSuffix: " and I'll get back to you.",
+      title: "Your questions answered",
+      callCard: {
+        eyebrow: "Still not sure?",
+        title: "Book a discovery call",
+        description: "Let's talk about how my experience can help with the challenges you're facing.",
+        buttonLabel: "Schedule now",
+      },
       items: [
         {
-          question: "What kind of projects do you typically work on?",
+          question: "How do you align design decisions with business goals?",
           answer:
-            "End-to-end product design for web and mobile — from early discovery and UX research through to detailed UI and design systems. Most of my recent work has been in B2B SaaS, industrial software, and fintech.",
+            "I don't treat design as a cosmetic layer, but as a growth lever. Before ideation, I align with PMs and stakeholders on the product's KPIs (e.g., conversion, retention, LTV). Every interface or flow decision is grounded in how it solves a user pain point that, in turn, moves a business metric.",
         },
         {
-          question: "What does your design process look like?",
+          question: "What's your working dynamic with engineering teams?",
           answer:
-            "It usually starts with understanding the problem and the user, then moves through wireframes, prototyping, and testing before landing on a polished, production-ready interface. I stay closely involved through implementation.",
+            "I believe in co-ownership: design only creates value once it's live and working flawlessly. Collaboration starts at discovery, not at handoff. I involve developers from the conceptual phase to align on technical feasibility, ensure structured handoffs backed by supporting documentation, and stay actively involved in visual and behavioral QA.",
         },
         {
-          question: "Do you work directly with engineering teams?",
+          question: "What's your role in the use and maturity of Design Systems?",
           answer:
-            "Yes. Good design only ships when design and engineering are tightly aligned, so I pair closely with developers from early concepts through handoff and QA.",
+            "I see the Design System as an internal product that ensures scale and consistency. I contribute actively by documenting accessible components, defining interaction patterns, and aligning tokens with the engineering team to speed up development.",
         },
         {
-          question: "Do you use AI tools in your workflow?",
+          question: "How do you integrate AI into your workflow?",
           answer:
-            "Regularly — for research, prototyping, and increasingly for implementation. The Plific case study on this site walks through an example of that process in detail.",
+            "I use AI as a productivity lever across the entire product cycle — synthesizing research data, accelerating prototypes, and bridging interface and code. The Plific case study shows in practice how this integration optimized delivery time and project precision.",
         },
         {
-          question: "Are you available for new projects?",
+          question: "What does your post-launch follow-up process look like?",
           answer:
-            "It depends on the moment — feel free to reach out and I'll let you know my current availability and how we could work together.",
+            "Rollout is the start of the learning cycle, not the end of the project. The metrics set at kickoff serve as a baseline, but impact analysis only gains real depth in production, by crossing quantitative data with qualitative context. In practice, I combine tracking usage metrics and reviewing session recordings at friction points with an active listening routine alongside Customer Success and Sales. To scale that qualitative capture, I use AI to mine transcripts from online client meetings, identifying spontaneous mentions and sentiment about the new feature. Triangulating this data produces concrete insights that feed and reprioritize the iteration backlog.",
         },
       ],
     },
@@ -926,8 +914,8 @@ export const content: Record<Locale, Content> = {
           heroImage: {
             src: "/images/tractian/hero-bg.png",
             alt: "Planta industrial vista pela janela do escritório, com o app mobile da Tractian e um card de insight de falha sobrepostos",
-            width: 1800,
-            height: 775,
+            width: 3796,
+            height: 1760,
           },
           cardImage: {
             src: "/images/tractian/project-card-v2.png",
@@ -945,12 +933,14 @@ export const content: Record<Locale, Content> = {
               ],
             },
             {
-              type: "stats",
-              items: [
-                { value: "176", label: "Normal" },
-                { value: "6", label: "Observe" },
-                { value: "4", label: "Aviso" },
-                { value: "2", label: "Perigo" },
+              type: "image",
+              images: [
+                {
+                  src: "/images/tractian/status-cards.png",
+                  alt: "Contagem de status dos equipamentos: 176 Normal, 6 Observe, 4 Aviso, 2 Perigo",
+                  width: 7517,
+                  height: 877,
+                },
               ],
             },
             {
@@ -1140,12 +1130,6 @@ export const content: Record<Locale, Content> = {
                   width: 1600,
                   height: 725,
                 },
-                {
-                  src: "/images/tractian/ecosystem-mobile.png",
-                  alt: "A Overview redesenhada exibida no app mobile",
-                  width: 537,
-                  height: 800,
-                },
               ],
             },
             {
@@ -1154,6 +1138,7 @@ export const content: Record<Locale, Content> = {
               title: "Protótipo mobile navegável — desenhado para garantir precisão nos mínimos detalhes",
               buttonLabel: "Ver protótipo",
               href: "https://viniciusmaitan.figma.site/prototype",
+              prototypeEmbedUrl: TRACTIAN_PROTOTYPE_EMBED_URL,
             },
           ],
         },
@@ -1178,8 +1163,8 @@ export const content: Record<Locale, Content> = {
           heroImage: {
             src: "/images/plific/hero.png",
             alt: "Entregador de bicicleta em frente a um prédio comercial, com três telas do app Plific sobrepostas",
-            width: 1900,
-            height: 406,
+            width: 3796,
+            height: 1760,
           },
           cardImage: {
             src: "/images/plific/project-card-v2.png",
@@ -1390,17 +1375,6 @@ export const content: Record<Locale, Content> = {
               buttonLabel: "Acessar",
               href: "https://plific.vercel.app/",
             },
-            {
-              type: "image",
-              images: [
-                {
-                  src: "/images/plific/final-product.png",
-                  alt: "Landing page e telas da plataforma Plific finalizadas, hero escuro e passos de onboarding claros",
-                  width: 1800,
-                  height: 1177,
-                },
-              ],
-            },
           ],
         },
       ],
@@ -1479,36 +1453,38 @@ export const content: Record<Locale, Content> = {
     },
     faq: {
       eyebrow: "FAQ",
-      title: "Perguntas frequentes",
-      subtitle: "Tudo o que você precisa saber antes de começarmos a trabalhar juntos.",
-      contactPrefix: "Não encontrou o que procurava? Fale ",
-      contactLinkLabel: "diretamente comigo",
-      contactSuffix: " e eu retorno em breve.",
+      title: "Suas perguntas respondidas",
+      callCard: {
+        eyebrow: "Ainda com dúvidas?",
+        title: "Agende uma call",
+        description: "Vamos conversar sobre como minha experiência pode ajudar nos desafios que você precisa enfrentar.",
+        buttonLabel: "Agendar agora",
+      },
       items: [
         {
-          question: "Que tipo de projeto você costuma fazer?",
+          question: "Como você alinha decisões de design com os objetivos de negócio?",
           answer:
-            "Design de produto de ponta a ponta para web e mobile — de descoberta e pesquisa de UX até UI detalhada e design systems. A maior parte do meu trabalho recente foi em SaaS B2B, software industrial e fintech.",
+            "Não trato design como camada estética, mas como alavanca de crescimento. Antes da ideação, alinho com PMs e stakeholders os KPIs de produto (ex.: conversão, retenção, LTV). Cada escolha de interface ou fluxo é fundamentada em como ela resolve uma dor do usuário que, por consequência, move uma métrica de negócio.",
         },
         {
-          question: "Como é o seu processo de design?",
+          question: "Como é a sua dinâmica de trabalho com times técnicos?",
           answer:
-            "Geralmente começa entendendo o problema e o usuário, passa por wireframes, prototipação e testes, até chegar numa interface polida e pronta para produção. Fico bem próximo também durante a implementação.",
+            "Acredito em co-propriedade: o design só gera valor quando está no ar e funcionando perfeitamente. A colaboração começa no discovery, não no handoff. Envolvo desenvolvedores desde a fase conceitual para alinhar viabilidade técnica, garanto handoffs estruturados com documentações de apoio e atuo ativamente no QA visual e comportamental.",
         },
         {
-          question: "Você trabalha em contato direto com o time de engenharia?",
+          question: "Qual é o seu papel no uso e maturidade de Design Systems?",
           answer:
-            "Sim. Um bom design só vira produto quando design e engenharia estão bem alinhados, então trabalho de perto com desenvolvedores desde os primeiros conceitos até o handoff e o QA.",
+            "Vejo o Design System como um produto interno que garante escala e consistência. Contribuo ativamente documentando componentes acessíveis, definindo padrões de interação e alinhando tokens com o time de engenharia para acelerar o desenvolvimento.",
         },
         {
-          question: "Você usa IA no seu processo de trabalho?",
+          question: "Como você integra IA no seu fluxo de trabalho?",
           answer:
-            "Bastante — em pesquisa, prototipação e cada vez mais na implementação. O case da Plific neste portfólio detalha um exemplo real desse processo.",
+            "Utilizo IA como alavanca de produtividade em todo o ciclo do produto — na síntese de dados de pesquisa, na aceleração de protótipos e na ponte entre interface e código. O case da Plific exemplifica como essa integração otimizou o tempo de entrega e a precisão do projeto na prática.",
         },
         {
-          question: "Você está disponível para novos projetos?",
+          question: "Qual é o seu processo de acompanhamento no pós-lançamento?",
           answer:
-            "Depende do momento — me chama que eu conto certinho minha disponibilidade atual e como podemos trabalhar juntos.",
+            "O rollout é o início do ciclo de aprendizado, não o encerramento do projeto. As métricas estabelecidas no kickoff funcionam como linha de base, mas a análise de impacto ganha real profundidade em produção ao cruzar dados quantitativos com contexto qualitativo. Na prática, combino o acompanhamento das métricas de uso e a observação de gravações de sessão nos pontos de fricção com uma rotina ativa de escuta junto a Customer Success e Vendas. Para dar escala a essa captura qualitativa, utilizo inteligência artificial para minerar transcrições de reuniões online com clientes, identificando menções e sentimentos espontâneos sobre a nova funcionalidade. A triangulação desses dados gera insights concretos que alimentam e reordenam o backlog de iterações.",
         },
       ],
     },

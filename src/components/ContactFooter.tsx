@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { useRef, type ReactNode } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { useLocale } from "@/lib/locale-context";
@@ -17,9 +18,14 @@ export default function ContactFooter() {
   const { t, locale, toggleLocale } = useLocale();
   const handleSectionLink = useSectionLinkClick();
   const lenis = useLenis();
+  const pathname = usePathname();
+  const isCaseStudy = pathname.startsWith("/projects/");
   const sectionRef = useRef<HTMLElement>(null);
   const { scrollYProgress } = useScroll({
-    target: sectionRef,
+    // On case study pages the contact section itself never renders, so its
+    // ref never hydrates — targeting it unconditionally makes framer-motion
+    // throw "Target ref is defined but not hydrated".
+    target: isCaseStudy ? undefined : sectionRef,
     offset: ["start end", "start start"],
   });
   const topShadow = useTransform(
@@ -64,6 +70,7 @@ export default function ContactFooter() {
 
   return (
     <>
+      {!isCaseStudy && (
       <motion.section
         ref={sectionRef}
         id="contact"
@@ -118,6 +125,7 @@ export default function ContactFooter() {
           </div>
         </div>
       </motion.section>
+      )}
 
       <footer data-cursor-theme="dark" className="relative -mt-10 overflow-hidden rounded-t-[32px] bg-dk-background pt-20 pb-16 text-dk-title">
         <div
