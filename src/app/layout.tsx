@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono, DM_Serif_Text } from "next/font/google";
+import Script from "next/script";
 import "./globals.css";
 import { LocaleProvider } from "@/lib/locale-context";
 import SmoothScroll from "@/components/SmoothScroll";
@@ -54,6 +55,15 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       className={`${geistSans.variable} ${geistMono.variable} ${dmSerifText.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col bg-lg-background text-lg-title">
+        <Script src="https://www.googletagmanager.com/gtag/js?id=G-1Y5F0HBRTD" strategy="afterInteractive" />
+        <Script id="google-analytics" strategy="afterInteractive">
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', 'G-1Y5F0HBRTD');
+          `}
+        </Script>
         <LocaleProvider>
           <Cursor />
           <SmoothScroll>
