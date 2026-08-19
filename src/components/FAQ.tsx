@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState, type ReactNode } from "react";
+import { trackEvent } from "@/lib/analytics";
 import { useLocale } from "@/lib/locale-context";
 import Reveal from "./Reveal";
 
@@ -118,6 +119,7 @@ export default function FAQ() {
               target="_blank"
               rel="noopener noreferrer"
               data-cursor="link"
+              onClick={() => trackEvent("schedule_call_click", { location: "faq" })}
               className="mt-[18px] flex h-10 w-fit items-center gap-2 rounded-sm bg-blue-300 px-4 text-sm font-medium text-lg-background transition-opacity hover:opacity-85"
             >
               <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden>

@@ -3,6 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useLayoutEffect, useRef, useState } from "react";
+import { trackEvent } from "@/lib/analytics";
 import { useLocale } from "@/lib/locale-context";
 import { useSectionLinkClick } from "@/lib/use-section-link";
 import Reveal from "./Reveal";
@@ -169,7 +170,10 @@ export default function Hero() {
                 <Link
                   data-cursor="link"
                   href="/#projects"
-                  onClick={handleSectionLink("/#projects")}
+                  onClick={(e) => {
+                    handleSectionLink("/#projects")(e);
+                    trackEvent("view_projects_click", { location: "hero" });
+                  }}
                   className="flex h-10 items-center rounded-sm bg-blue-300 px-4 text-sm font-medium text-lg-background transition-opacity hover:opacity-85"
                 >
                   {t.hero.ctaPrimary}
@@ -179,6 +183,7 @@ export default function Hero() {
                   href={t.hero.cvUrl}
                   target="_blank"
                   rel="noopener noreferrer"
+                  onClick={() => trackEvent("cv_click", { location: "hero" })}
                   className="flex h-10 items-center rounded-sm border border-hairline px-4 text-sm text-lg-subtitle2 transition-colors hover:border-blue-300"
                 >
                   {t.hero.ctaSecondary}

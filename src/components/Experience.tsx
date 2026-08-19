@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState, type RefObject } from "react";
 import Image from "next/image";
 import { motion, useScroll, useTransform, type MotionValue } from "framer-motion";
+import { trackEvent } from "@/lib/analytics";
 import { useLocale } from "@/lib/locale-context";
 import Reveal from "./Reveal";
 import type { TimelineEntry } from "@/lib/content";
@@ -122,6 +123,7 @@ export default function Experience() {
                 href={t.hero.cvUrl}
                 target="_blank"
                 rel="noopener noreferrer"
+                onClick={() => trackEvent("cv_click", { location: "experience" })}
                 className="mt-8 inline-flex h-10 items-center rounded-sm bg-blue-300 px-4 text-sm font-medium text-lg-background transition-opacity hover:opacity-85"
               >
                 {t.hero.ctaSecondary}

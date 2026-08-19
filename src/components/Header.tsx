@@ -4,6 +4,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { useState } from "react";
 import { AnimatePresence, motion, useScroll, useTransform } from "framer-motion";
+import { trackEvent } from "@/lib/analytics";
 import { useLocale } from "@/lib/locale-context";
 import { useSectionLinkClick } from "@/lib/use-section-link";
 import type { Locale } from "@/lib/content";
@@ -133,7 +134,10 @@ function LangToggle({
         type="button"
         aria-label="English"
         aria-pressed={locale === "en"}
-        onClick={() => onSelect("en")}
+        onClick={() => {
+          onSelect("en");
+          trackEvent("language_change", { language: "en" });
+        }}
         className={`flex items-center justify-center rounded-full px-3 py-1.5 transition-colors ${
           locale === "en" ? "bg-white" : ""
         }`}
@@ -152,7 +156,10 @@ function LangToggle({
         type="button"
         aria-label="Português"
         aria-pressed={locale === "pt"}
-        onClick={() => onSelect("pt")}
+        onClick={() => {
+          onSelect("pt");
+          trackEvent("language_change", { language: "pt" });
+        }}
         className={`flex items-center justify-center rounded-full px-3 py-1.5 transition-colors ${
           locale === "pt" ? "bg-white" : ""
         }`}

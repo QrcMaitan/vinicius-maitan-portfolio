@@ -4,6 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useRef, type ReactNode } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
+import { trackEvent } from "@/lib/analytics";
 import { useLocale } from "@/lib/locale-context";
 import { useSectionLinkClick } from "@/lib/use-section-link";
 import { useLenis } from "./SmoothScroll";
@@ -35,6 +36,7 @@ export default function ContactFooter() {
 
   const links = [
     {
+      method: "whatsapp",
       icon: "/images/contact/whatsapp-icon.svg",
       iconLight: "/images/contact/whatsapp-icon-light.svg",
       label: t.contact.whatsappLabel,
@@ -42,6 +44,7 @@ export default function ContactFooter() {
       href: `https://wa.me/${t.contact.whatsapp.replace(/\D/g, "")}`,
     },
     {
+      method: "email",
       icon: "/images/contact/email-icon.svg",
       iconLight: "/images/contact/email-icon-light.svg",
       label: t.contact.emailLabel,
@@ -49,6 +52,7 @@ export default function ContactFooter() {
       href: `mailto:${t.contact.email}`,
     },
     {
+      method: "linkedin",
       icon: "/images/contact/linkedin-icon.svg",
       iconLight: "/images/contact/linkedin-icon-light.svg",
       label: t.contact.linkedinLabel,
@@ -113,6 +117,7 @@ export default function ContactFooter() {
                       href={link.href}
                       target="_blank"
                       rel="noopener noreferrer"
+                      onClick={() => trackEvent("contact_click", { method: link.method })}
                       className="inline-flex items-center gap-2.5 rounded-full bg-white/15 px-4 py-2 shadow-[0px_1px_4px_rgba(54,60,68,0.1)] backdrop-blur-sm transition-colors hover:bg-white/25"
                     >
                       <img src={link.iconLight} alt="" width={24} height={24} draggable={false} className="shrink-0" />

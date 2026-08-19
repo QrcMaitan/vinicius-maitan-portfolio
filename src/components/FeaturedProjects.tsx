@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import type { PointerEvent as ReactPointerEvent } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { trackEvent } from "@/lib/analytics";
 import { useLocale } from "@/lib/locale-context";
 import Reveal from "./Reveal";
 
@@ -160,6 +161,7 @@ function SwitcherItem({
             <Link
               href={`/projects/${item.slug}`}
               data-cursor="link"
+              onClick={() => trackEvent("case_study_click", { project: item.slug })}
               className="font-mono text-[15px] font-medium text-white transition-opacity hover:opacity-70"
             >
               {accessCaseLabel} →
