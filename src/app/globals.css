@@ -18,7 +18,7 @@
 
   /* Geral */
   --blue-100: #7c93a2;
-  --blue-200: #3c5468;
+  --blue-200: #1f4d74;
   --blue-300: #3c5468;
   --divider: #e7e2d6;
 
@@ -149,9 +149,16 @@ h4 {
 }
 
 @media (pointer: fine) {
-  * {
+  :root:not(.native-cursor) * {
     cursor: none;
   }
+}
+
+/* The prototype drawer embeds a cross-origin iframe: our custom cursor can't
+   track the mouse while it's over the iframe, so we fall back to the native
+   OS cursor for the whole drawer instead of showing a frozen dot. */
+.native-cursor #custom-cursor-root {
+  display: none;
 }
 
 @media (prefers-reduced-motion: reduce) {

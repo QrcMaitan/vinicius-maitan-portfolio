@@ -10,7 +10,7 @@ export default function ToolsMarquee({ items }: { items: TagItem[] }) {
           <span
             key={`${item.label}-${i}`}
             aria-hidden={i >= items.length || undefined}
-            className={`shrink-0 whitespace-nowrap rounded-full border px-3 py-1 text-sm tracking-[-0.02em] transition-colors hover:border-blue-300 hover:bg-blue-300 hover:text-white ${
+            className={`shrink-0 whitespace-nowrap rounded-full border px-3 py-1 text-sm tracking-[-0.02em] transition-colors hover:border-blue-200 hover:bg-blue-200 hover:text-white ${
               item.active ? "border-blue-200 text-blue-200" : "border-hairline text-lg-subtitle"
             }`}
           >

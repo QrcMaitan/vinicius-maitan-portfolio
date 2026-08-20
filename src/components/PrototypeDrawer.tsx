@@ -17,6 +17,11 @@ export default function PrototypeDrawer({
 
     const previousOverflow = document.body.style.overflow;
     document.body.style.overflow = "hidden";
+    // The embedded iframe is cross-origin, so mouse events over it never
+    // reach our window listeners — the custom cursor would freeze in place
+    // at the iframe's edge while the iframe's own native cursor moves
+    // underneath it. Fall back to the native cursor for the whole drawer.
+    document.documentElement.classList.add("native-cursor");
 
     function onKeyDown(e: KeyboardEvent) {
       if (e.key === "Escape") onClose();
@@ -25,6 +30,7 @@ export default function PrototypeDrawer({
 
     return () => {
       document.body.style.overflow = previousOverflow;
+      document.documentElement.classList.remove("native-cursor");
       window.removeEventListener("keydown", onKeyDown);
     };
   }, [open, onClose]);

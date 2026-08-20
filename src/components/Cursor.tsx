@@ -65,7 +65,7 @@ export default function Cursor() {
   if (!enabled) return null;
 
   return (
-    <div aria-hidden className="pointer-events-none fixed inset-0 z-[100]">
+    <div id="custom-cursor-root" aria-hidden className="pointer-events-none fixed inset-0 z-[100]">
       <div
         ref={dotRef}
         className="fixed left-0 top-0 -translate-x-1/2 -translate-y-1/2 rounded-full transition-[width,height,background-color] duration-150 ease-out"

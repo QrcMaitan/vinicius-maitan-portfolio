@@ -17,10 +17,22 @@ export type CaseStudyBlock =
   | { type: "text"; eyebrow?: string; title?: string; paragraphs: string[] }
   | { type: "stats"; items: { value: string; label: string }[] }
   | { type: "quote"; tagTop: string; tagBottom: string; text: string }
-  | { type: "grid"; items: { title: string; description: string }[] }
+  | { type: "steps"; items: { title: string; description: string }[] }
   | { type: "chain"; items: string[] }
-  | { type: "cta"; eyebrow: string; title: string; buttonLabel: string; href: string; prototypeEmbedUrl?: string }
-  | { type: "image"; images: CaseStudyImage[] };
+  | {
+      type: "cta";
+      eyebrow: string;
+      title: string;
+      subtitle?: string;
+      buttonLabel: string;
+      href: string;
+      prototypeEmbedUrl?: string;
+      icon?: { src: string; alt: string; width: number; height: number };
+      previewImage?: CaseStudyImage;
+      previewBox?: { width: number; height: number };
+    }
+  | { type: "image"; images: CaseStudyImage[] }
+  | { type: "tools"; items: { icon: string; label: string }[] };
 
 export type Project = {
   slug: string;
@@ -258,14 +270,14 @@ export const content: Record<Locale, Content> = {
               eyebrow: "Problems",
               title: "Lack of direction and a sense of urgency",
               paragraphs: [
-                "Not all equipment failures are the same or at the same stage. The failure detection model alerts the client days or months before it actually poses an imminent risk. Some early-stage failures are not even perceived by human senses. This means that maintenance can wait until it is close to becoming a problem.",
+                "**Not all equipment failures are the same** or at the same stage. The failure detection model alerts the client days or months before it actually poses an imminent risk. Some **early-stage failures** are not even perceived by human senses. This means that maintenance can wait until it is close to becoming a problem.",
               ],
             },
             {
               type: "quote",
               tagTop: "Failure insight",
               tagBottom: "Immediate correction",
-              text: "If all failure alerts have the same importance, it means that nothing is a priority.",
+              text: "If all failure alerts have the same importance, it means that **nothing is a priority**.",
             },
             {
               type: "text",
@@ -312,7 +324,7 @@ export const content: Record<Locale, Content> = {
               ],
             },
             {
-              type: "grid",
+              type: "steps",
               items: [
                 {
                   title: "Stack of unchecked insights",
@@ -391,11 +403,11 @@ export const content: Record<Locale, Content> = {
             {
               type: "text",
               eyebrow: "Results",
-              title: "Scaling support by reducing its necessity",
+              title: "The precision of a design that fulfills its role",
               paragraphs: [],
             },
             {
-              type: "grid",
+              type: "steps",
               items: [
                 {
                   title: "The number of clicks to check has been reduced from 11 to 4",
@@ -447,10 +459,19 @@ export const content: Record<Locale, Content> = {
             {
               type: "cta",
               eyebrow: "Prototype",
-              title: "Navigable mobile prototype — designed to ensure precision in the smallest details",
+              title: "Navigable mobile prototype",
+              subtitle: "Designed to ensure precision in the smallest details",
               buttonLabel: "View prototype",
               href: "https://viniciusmaitan.figma.site/prototype",
               prototypeEmbedUrl: TRACTIAN_PROTOTYPE_EMBED_URL,
+              icon: { src: "/images/tractian/figma-logo.svg", alt: "Figma", width: 20, height: 32 },
+              previewImage: {
+                src: "/images/tractian/prototype-preview.png",
+                alt: "Tractian mobile prototype showing the Alarming Assets panel",
+                width: 2201,
+                height: 3276,
+              },
+              previewBox: { width: 260, height: 259 },
             },
           ],
         },
@@ -500,9 +521,23 @@ export const content: Record<Locale, Content> = {
               title: "Setup",
               paragraphs: [
                 "The first step was to structure the work environment and connect the tools that would support the entire product construction cycle, from interpreting design references to code versioning and application publishing.",
-                "I started with the integration with Figma. The goal was to provide Claude Code with a more complete visual and structural context about the project. With this access, it was possible to consult components, variables, styles, layout properties, and assets used as references for the interface implementation. This setup began to function as a source of context for the AI, rather than just an isolated visual reference.",
-                "Next, I connected the project to GitHub and defined the repository as the central source of code. This integration allowed for organizing application files, recording project evolution through commits, and maintaining traceability of changes made during development.",
-                "Finally, I set up Vercel as the hosting and publishing platform. The integration with GitHub enabled the automation of the deployment process and the generation of new application versions whenever relevant changes were pushed to the repository.",
+              ],
+            },
+            {
+              type: "tools",
+              items: [
+                { icon: "/images/tools/apps/app-figma.svg", label: "Figma" },
+                { icon: "/images/tools/apps/app-claude.svg", label: "Claude" },
+                { icon: "/images/tools/apps/app-github.svg", label: "GitHub" },
+                { icon: "/images/tools/apps/app-vercel.svg", label: "Vercel" },
+              ],
+            },
+            {
+              type: "text",
+              paragraphs: [
+                "I started with the integration with **Figma**. The goal was to provide Claude Code with a more complete visual and structural context about the project. With this access, it was possible to consult components, variables, styles, layout properties, and assets used as references for the interface implementation. This setup began to function as a source of context for the AI, rather than just an isolated visual reference.",
+                "Next, I connected the project to **GitHub** and defined the repository as the central source of code. This integration allowed for organizing application files, recording project evolution through commits, and maintaining traceability of changes made during development.",
+                "Finally, I set up **Vercel** as the hosting and publishing platform. The integration with GitHub enabled the automation of the deployment process and the generation of new application versions whenever relevant changes were pushed to the repository.",
               ],
             },
             {
@@ -609,7 +644,7 @@ export const content: Record<Locale, Content> = {
               paragraphs: [],
             },
             {
-              type: "grid",
+              type: "steps",
               items: [
                 {
                   title: "Rhythm and visual composition",
@@ -683,9 +718,18 @@ export const content: Record<Locale, Content> = {
             {
               type: "cta",
               eyebrow: "Result",
-              title: "AI as pilot co-pilot — access the live product",
+              title: "Access the live product!",
+              subtitle: "AI as ~~pilot~~ co-pilot",
               buttonLabel: "Access",
               href: "https://plific.vercel.app/",
+              icon: { src: "/images/plific/cursor-icon.svg", alt: "", width: 32, height: 32 },
+              previewImage: {
+                src: "/images/plific/result-preview.png",
+                alt: "Plific landing page open in a browser window",
+                width: 3164,
+                height: 2070,
+              },
+              previewBox: { width: 380, height: 249 },
             },
           ],
         },
@@ -948,14 +992,14 @@ export const content: Record<Locale, Content> = {
               eyebrow: "Problemas",
               title: "A falta de direcionamento e o sentimento de emergência",
               paragraphs: [
-                "Nem toda falha de um equipamento é igual ou está no mesmo estágio. O modelo de detecção de falhas notifica o cliente dias ou meses antes de realmente representar um risco iminente. Algumas falhas em estágio inicial nem são percebidas pelos sentidos humanos. Isso significa que a manutenção do equipamento pode esperar até que esteja perto de se tornar um problema.",
+                "**Nem toda falha de um equipamento é igual** ou está no mesmo estágio. O modelo de detecção de falhas notifica o cliente dias ou meses antes de realmente representar um risco iminente. Algumas **falhas em estágio inicial** nem são percebidas pelos sentidos humanos. Isso significa que a manutenção do equipamento pode esperar até que esteja perto de se tornar um problema.",
               ],
             },
             {
               type: "quote",
               tagTop: "Insight de falha",
               tagBottom: "Correção imediata",
-              text: "Se todos os alertas de falhas têm a mesma importância, significa que nada é prioridade.",
+              text: "Se todos os alertas de falhas têm a mesma importância, significa que **nada é prioridade**.",
             },
             {
               type: "text",
@@ -1002,7 +1046,7 @@ export const content: Record<Locale, Content> = {
               ],
             },
             {
-              type: "grid",
+              type: "steps",
               items: [
                 {
                   title: "Pilha de insights não checados",
@@ -1080,11 +1124,11 @@ export const content: Record<Locale, Content> = {
             {
               type: "text",
               eyebrow: "Resultados",
-              title: "Escalando o suporte ao reduzir a necessidade dele",
+              title: "A precisão de um design que cumpre o seu papel",
               paragraphs: [],
             },
             {
-              type: "grid",
+              type: "steps",
               items: [
                 {
                   title: "O número de cliques até a checagem foi reduzido de 11 para 4",
@@ -1135,10 +1179,19 @@ export const content: Record<Locale, Content> = {
             {
               type: "cta",
               eyebrow: "Protótipo",
-              title: "Protótipo mobile navegável — desenhado para garantir precisão nos mínimos detalhes",
+              title: "Protótipo mobile navegável",
+              subtitle: "Desenhado para garantir precisão nos mínimos detalhes",
               buttonLabel: "Ver protótipo",
               href: "https://viniciusmaitan.figma.site/prototype",
               prototypeEmbedUrl: TRACTIAN_PROTOTYPE_EMBED_URL,
+              icon: { src: "/images/tractian/figma-logo.svg", alt: "Figma", width: 20, height: 32 },
+              previewImage: {
+                src: "/images/tractian/prototype-preview.png",
+                alt: "Protótipo mobile da Tractian mostrando o painel de Alarming Assets",
+                width: 2201,
+                height: 3276,
+              },
+              previewBox: { width: 260, height: 259 },
             },
           ],
         },
@@ -1188,9 +1241,23 @@ export const content: Record<Locale, Content> = {
               title: "Setup",
               paragraphs: [
                 "A primeira etapa foi estruturar o ambiente de trabalho e conectar as ferramentas que sustentariam todo o ciclo de construção do produto, desde a interpretação das referências de design até o versionamento do código e a publicação da aplicação.",
-                "Comecei pela integração com o Figma. O objetivo era fornecer ao Claude Code um contexto visual e estrutural mais completo sobre o projeto. Com esse acesso, foi possível consultar componentes, variáveis, estilos, propriedades de layout e assets utilizados como referência para a implementação da interface. Essa configuração passou a funcionar como uma fonte de contexto para a IA, e não apenas como uma referência visual isolada.",
-                "Em seguida, conectei o projeto ao GitHub e defini o repositório como a fonte central do código. Essa integração permitiu organizar os arquivos da aplicação, registrar a evolução do projeto por meio de commits e manter a rastreabilidade das alterações realizadas durante o desenvolvimento.",
-                "Por fim, configurei a Vercel como plataforma de hospedagem e publicação. A integração com o GitHub possibilitou automatizar o processo de deploy e gerar novas versões da aplicação sempre que alterações relevantes eram enviadas ao repositório.",
+              ],
+            },
+            {
+              type: "tools",
+              items: [
+                { icon: "/images/tools/apps/app-figma.svg", label: "Figma" },
+                { icon: "/images/tools/apps/app-claude.svg", label: "Claude" },
+                { icon: "/images/tools/apps/app-github.svg", label: "GitHub" },
+                { icon: "/images/tools/apps/app-vercel.svg", label: "Vercel" },
+              ],
+            },
+            {
+              type: "text",
+              paragraphs: [
+                "Comecei pela integração com o **Figma**. O objetivo era fornecer ao Claude Code um contexto visual e estrutural mais completo sobre o projeto. Com esse acesso, foi possível consultar componentes, variáveis, estilos, propriedades de layout e assets utilizados como referência para a implementação da interface. Essa configuração passou a funcionar como uma fonte de contexto para a IA, e não apenas como uma referência visual isolada.",
+                "Em seguida, conectei o projeto ao **GitHub** e defini o repositório como a fonte central do código. Essa integração permitiu organizar os arquivos da aplicação, registrar a evolução do projeto por meio de commits e manter a rastreabilidade das alterações realizadas durante o desenvolvimento.",
+                "Por fim, configurei a **Vercel** como plataforma de hospedagem e publicação. A integração com o GitHub possibilitou automatizar o processo de deploy e gerar novas versões da aplicação sempre que alterações relevantes eram enviadas ao repositório.",
               ],
             },
             {
@@ -1297,7 +1364,7 @@ export const content: Record<Locale, Content> = {
               paragraphs: [],
             },
             {
-              type: "grid",
+              type: "steps",
               items: [
                 {
                   title: "Ritmo e composição visual",
@@ -1371,9 +1438,18 @@ export const content: Record<Locale, Content> = {
             {
               type: "cta",
               eyebrow: "Resultado",
-              title: "IA como piloto co-piloto — acesse o produto no ar",
+              title: "Acesse o produto no ar!",
+              subtitle: "IA como ~~piloto~~ co-piloto",
               buttonLabel: "Acessar",
               href: "https://plific.vercel.app/",
+              icon: { src: "/images/plific/cursor-icon.svg", alt: "", width: 32, height: 32 },
+              previewImage: {
+                src: "/images/plific/result-preview.png",
+                alt: "Landing page da Plific aberta em uma janela de navegador",
+                width: 3164,
+                height: 2070,
+              },
+              previewBox: { width: 380, height: 249 },
             },
           ],
         },

@@ -3,7 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { useState } from "react";
+import { useState, type CSSProperties } from "react";
 import { useLocale } from "@/lib/locale-context";
 import type { CaseStudyBlock } from "@/lib/content";
 import Reveal from "./Reveal";
@@ -17,7 +17,7 @@ export default function CaseStudyView({ slug }: { slug: string }) {
   if (!project) notFound();
 
   return (
-    <main className="flex-1 bg-lg-background2 pt-36 pb-24 md:pt-44 md:pb-32">
+    <main className="flex-1 bg-white pt-36 pb-24 md:pt-44 md:pb-32">
       <div className="mx-auto max-w-3xl px-6 md:px-10">
         <Reveal>
           <Link
@@ -126,6 +126,22 @@ export default function CaseStudyView({ slug }: { slug: string }) {
   );
 }
 
+function renderRichText(text: string) {
+  return text.split(/(\*\*.+?\*\*|~~.+?~~)/g).map((part, i) => {
+    if (part.startsWith("**") && part.endsWith("**")) {
+      return (
+        <strong key={i} className="font-semibold">
+          {part.slice(2, -2)}
+        </strong>
+      );
+    }
+    if (part.startsWith("~~") && part.endsWith("~~")) {
+      return <s key={i}>{part.slice(2, -2)}</s>;
+    }
+    return part;
+  });
+}
+
 function CaseStudyBlockView({ block }: { block: CaseStudyBlock }) {
   switch (block.type) {
     case "text": {
@@ -156,7 +172,7 @@ function CaseStudyBlockView({ block }: { block: CaseStudyBlock }) {
                   i === 0 && (block.eyebrow || block.title) ? "mt-4" : "mt-4 first:mt-0"
                 }`}
               >
-                {p}
+                {renderRichText(p)}
               </p>
             ))}
           </div>
@@ -190,26 +206,32 @@ function CaseStudyBlockView({ block }: { block: CaseStudyBlock }) {
     case "quote":
       return (
         <Reveal>
-          <div className="mt-12 rounded-md border border-hairline p-8 text-center md:p-10">
-            <div className="flex flex-wrap items-center justify-center gap-3 font-mono text-[11px] uppercase tracking-[0.06em] text-blue-200">
+          <div className="mt-8">
+            <div className="flex flex-col items-center justify-center gap-3 font-mono text-base uppercase tracking-[0.06em] text-lg-subtitle2 sm:flex-row">
               <span>{block.tagTop}</span>
-              <span className="text-lg-subtitle2">→</span>
+              <img
+                src="/images/tractian/insight-correction-divider.svg"
+                alt=""
+                width={40}
+                height={22}
+                className="h-4 w-auto"
+              />
               <span>{block.tagBottom}</span>
             </div>
-            <p className="mt-5 font-display text-xl italic leading-snug text-lg-title md:text-2xl">
-              “{block.text}”
-            </p>
+            <p className="mt-8 text-base leading-relaxed text-lg-subtitle2">{renderRichText(block.text)}</p>
           </div>
         </Reveal>
       );
 
-    case "grid":
+    case "steps":
       return (
         <Reveal>
           <div className="mt-8 grid gap-x-10 gap-y-8 md:grid-cols-2">
-            {block.items.map((item) => (
+            {block.items.map((item, i) => (
               <div key={item.title}>
-                <h4 className="font-display text-lg text-lg-title">{item.title}</h4>
+                <h4 className="font-display text-lg text-lg-title">
+                  {i + 1}. {item.title}
+                </h4>
                 <p className="mt-2 text-sm leading-relaxed text-lg-subtitle2">{item.description}</p>
               </div>
             ))}
@@ -257,6 +279,35 @@ function CaseStudyBlockView({ block }: { block: CaseStudyBlock }) {
         </Reveal>
       );
 
+    case "tools":
+      return (
+        <Reveal>
+          <div className="mt-10 flex flex-wrap items-center justify-center gap-3 sm:gap-6">
+            {block.items.map((item, i) => (
+              <div key={item.label} className="flex items-center gap-3 sm:gap-6">
+                <img
+                  src={item.icon}
+                  alt={item.label}
+                  width={64}
+                  height={64}
+                  draggable={false}
+                  className="size-10 shrink-0 sm:size-[52px]"
+                />
+                {i < block.items.length - 1 && (
+                  <img
+                    src="/images/plific/icon-separator.svg"
+                    alt=""
+                    width={26}
+                    height={12}
+                    className="h-2.5 w-[18px] shrink-0 sm:h-3 sm:w-[26px]"
+                  />
+                )}
+              </div>
+            ))}
+          </div>
+        </Reveal>
+      );
+
     case "cta":
       return <CtaBlock block={block} />;
 
@@ -267,6 +318,97 @@ function CaseStudyBlockView({ block }: { block: CaseStudyBlock }) {
 
 function CtaBlock({ block }: { block: Extract<CaseStudyBlock, { type: "cta" }> }) {
   const [prototypeOpen, setPrototypeOpen] = useState(false);
+
+  if (block.previewImage) {
+    const isPrototype = Boolean(block.prototypeEmbedUrl);
+    const button = block.prototypeEmbedUrl ? (
+      <button
+        type="button"
+        data-cursor="link"
+        onClick={() => setPrototypeOpen(true)}
+        className="rounded-sm bg-blue-200 px-3.5 py-1.5 text-sm font-medium text-white transition-opacity hover:opacity-85"
+      >
+        {block.buttonLabel}
+      </button>
+    ) : (
+      <a
+        data-cursor="link"
+        href={block.href}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="rounded-sm bg-blue-200 px-3.5 py-1.5 text-sm font-medium text-white transition-opacity hover:opacity-85"
+      >
+        {block.buttonLabel}
+      </a>
+    );
+
+    return (
+      <>
+        <Reveal>
+          <div className="mt-16">
+            <span className="font-mono text-xs uppercase tracking-[0.08em] text-blue-200">{block.eyebrow}</span>
+            <div
+              className={`mt-4 flex flex-col gap-8 rounded-2xl bg-white px-6 shadow-[0px_1px_9px_2px_rgba(54,60,68,0.1)] sm:flex-row sm:gap-6 ${
+                isPrototype
+                  ? "items-start pt-8 sm:items-center sm:pl-8 sm:pr-12 sm:pt-6 sm:pb-0"
+                  : "items-start py-8 sm:items-center sm:pl-8 sm:pr-6 sm:py-6"
+              }`}
+            >
+              <div
+                className={`flex flex-1 flex-col items-start ${isPrototype ? "gap-5 sm:-mt-6" : "gap-6"}`}
+              >
+                {block.icon && (
+                  <img
+                    src={block.icon.src}
+                    alt={block.icon.alt}
+                    width={block.icon.width}
+                    height={block.icon.height}
+                    style={{ width: block.icon.width, height: block.icon.height }}
+                  />
+                )}
+                <div>
+                  <h3 className="font-display text-2xl text-lg-title">{block.title}</h3>
+                  {block.subtitle && (
+                    <p className="mt-2 text-base font-light text-lg-subtitle">{renderRichText(block.subtitle)}</p>
+                  )}
+                </div>
+                {button}
+              </div>
+              <div
+                className={`shrink-0 self-center overflow-hidden rounded-md sm:w-[var(--preview-w)] sm:self-end ${
+                  isPrototype ? "w-[220px]" : "w-full"
+                }`}
+                style={
+                  block.previewBox
+                    ? ({
+                        "--preview-w": `${block.previewBox.width}px`,
+                        aspectRatio: `${block.previewBox.width} / ${block.previewBox.height}`,
+                      } as CSSProperties)
+                    : undefined
+                }
+              >
+                <img
+                  src={block.previewImage.src}
+                  alt={block.previewImage.alt}
+                  width={block.previewImage.width}
+                  height={block.previewImage.height}
+                  className="h-full w-full object-cover object-top"
+                />
+              </div>
+            </div>
+          </div>
+        </Reveal>
+
+        {block.prototypeEmbedUrl && (
+          <PrototypeDrawer
+            open={prototypeOpen}
+            onClose={() => setPrototypeOpen(false)}
+            embedUrl={block.prototypeEmbedUrl}
+          />
+        )}
+      </>
+    );
+  }
 
   return (
     <>
@@ -279,7 +421,7 @@ function CtaBlock({ block }: { block: Extract<CaseStudyBlock, { type: "cta" }> }
               type="button"
               data-cursor="link"
               onClick={() => setPrototypeOpen(true)}
-              className="mt-6 inline-block rounded-sm bg-blue-300 px-6 py-3 font-mono text-xs uppercase tracking-[0.06em] text-lg-background transition-opacity hover:opacity-85"
+              className="mt-6 inline-block rounded-sm bg-blue-200 px-6 py-3 font-mono text-xs uppercase tracking-[0.06em] text-lg-background transition-opacity hover:opacity-85"
             >
               {block.buttonLabel}
             </button>
@@ -289,7 +431,7 @@ function CtaBlock({ block }: { block: Extract<CaseStudyBlock, { type: "cta" }> }
               href={block.href}
               target="_blank"
               rel="noopener noreferrer"
-              className="mt-6 inline-block rounded-sm bg-blue-300 px-6 py-3 font-mono text-xs uppercase tracking-[0.06em] text-lg-background transition-opacity hover:opacity-85"
+              className="mt-6 inline-block rounded-sm bg-blue-200 px-6 py-3 font-mono text-xs uppercase tracking-[0.06em] text-lg-background transition-opacity hover:opacity-85"
             >
               {block.buttonLabel}
             </a>

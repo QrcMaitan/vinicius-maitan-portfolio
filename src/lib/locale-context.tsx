@@ -12,11 +12,28 @@ type LocaleContextValue = {
 
 const LocaleContext = createContext<LocaleContextValue | null>(null);
 
+function syncLocaleQueryParam(locale: Locale) {
+  const url = new URL(window.location.href);
+  if (locale === "pt") {
+    url.searchParams.set("lang", "pt");
+  } else {
+    url.searchParams.delete("lang");
+  }
+  window.history.replaceState(null, "", url);
+}
+
 export function LocaleProvider({ children }: { children: ReactNode }) {
   const [locale, setLocaleState] = useState<Locale>("en");
 
+  // Read the ?lang= param once on mount so a shared link opens in that language.
+  useEffect(() => {
+    const param = new URLSearchParams(window.location.search).get("lang");
+    if (param === "pt") setLocaleState("pt");
+  }, []);
+
   useEffect(() => {
     document.documentElement.lang = locale;
+    syncLocaleQueryParam(locale);
   }, [locale]);
 
   const toggleLocale = () => setLocaleState((current) => (current === "en" ? "pt" : "en"));

@@ -120,7 +120,7 @@ export default function FAQ() {
               rel="noopener noreferrer"
               data-cursor="link"
               onClick={() => trackEvent("schedule_call_click", { location: "faq" })}
-              className="mt-[18px] flex h-10 w-fit items-center gap-2 rounded-sm bg-blue-300 px-4 text-sm font-medium text-lg-background transition-opacity hover:opacity-85"
+              className="mt-[18px] flex h-10 w-fit items-center gap-2 rounded-sm bg-blue-200 px-4 text-sm font-medium text-lg-background transition-opacity hover:opacity-85"
             >
               <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden>
                 <rect x="3" y="4" width="14" height="13" rx="2" stroke="currentColor" strokeWidth="1.4" />

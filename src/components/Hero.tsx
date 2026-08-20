@@ -2,102 +2,11 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useLayoutEffect, useRef, useState } from "react";
 import { trackEvent } from "@/lib/analytics";
 import { useLocale } from "@/lib/locale-context";
 import { useSectionLinkClick } from "@/lib/use-section-link";
 import Reveal from "./Reveal";
 import ToolsMarquee from "./ToolsMarquee";
-
-// Grows whichever of the two name lines falls short (via letter-spacing) so
-// their right edges line up like a justified logotype, at any viewport width.
-// The two lines use different clamp() font sizes and the first line is offset
-// by the avatar, so nothing guarantees matching right edges on its own — and
-// the gap between the words' natural widths changes shape at every
-// breakpoint, since the two clamp()s scale at different rates.
-//
-// Measures off-screen clones, never the live elements: react-dom only writes
-// a style property to the DOM when its value differs from the previous
-// render, so a direct `el.style.letterSpacing = ""` reset on the real node
-// (to read its baseline width) desyncs the DOM from React's own bookkeeping
-// — the next render computes the same value as before, react-dom sees no
-// change, skips the write, and the manual reset is stranded permanently.
-// Only ever grows, and clamps growth to the wrapper's right edge, so a line
-// is never stretched into wrapping or past the column.
-function useJustifiedNameWidths(firstName: string, lastName: string) {
-  const wrapperRef = useRef<HTMLDivElement>(null);
-  const firstRef = useRef<HTMLSpanElement>(null);
-  const lastRef = useRef<HTMLHeadingElement>(null);
-  const [letterSpacing, setLetterSpacing] = useState<{ first?: string; last?: string }>({});
-
-  useLayoutEffect(() => {
-    const wrapper = wrapperRef.current;
-    const firstEl = firstRef.current;
-    const lastEl = lastRef.current;
-    if (!wrapper || !firstEl || !lastEl) return;
-
-    function baselineWidth(el: HTMLElement) {
-      const clone = el.cloneNode(true) as HTMLElement;
-      clone.style.letterSpacing = "";
-      clone.style.position = "absolute";
-      clone.style.visibility = "hidden";
-      clone.style.left = "-9999px";
-      clone.style.top = "0";
-      document.body.appendChild(clone);
-      const base = parseFloat(getComputedStyle(clone).letterSpacing) || 0;
-      const range = document.createRange();
-      range.selectNodeContents(clone);
-      const width = range.getBoundingClientRect().width;
-      document.body.removeChild(clone);
-      return { base, width };
-    }
-
-    function measure() {
-      if (!wrapper || !firstEl || !lastEl) return;
-
-      const first = baselineWidth(firstEl);
-      const last = baselineWidth(lastEl);
-      const firstLeft = firstEl.getBoundingClientRect().left;
-      const lastLeft = lastEl.getBoundingClientRect().left;
-      const firstChars = firstEl.textContent?.length || 1;
-      const lastChars = lastEl.textContent?.length || 1;
-      const maxRight = wrapper.getBoundingClientRect().right;
-      const diff = lastLeft + last.width - (firstLeft + first.width);
-
-      if (Math.abs(diff) < 0.5) {
-        setLetterSpacing({});
-        return;
-      }
-
-      if (diff > 0) {
-        const grow = Math.min(diff, Math.max(maxRight - (firstLeft + first.width), 0));
-        setLetterSpacing(grow < 0.5 ? {} : { first: `${first.base + grow / firstChars}px` });
-      } else {
-        const grow = Math.min(-diff, Math.max(maxRight - (lastLeft + last.width), 0));
-        setLetterSpacing(grow < 0.5 ? {} : { last: `${last.base + grow / lastChars}px` });
-      }
-    }
-
-    measure();
-
-    const resizeObserver = new ResizeObserver(measure);
-    resizeObserver.observe(wrapper);
-
-    let cancelled = false;
-    if (document.fonts) {
-      document.fonts.ready.then(() => {
-        if (!cancelled) measure();
-      });
-    }
-
-    return () => {
-      cancelled = true;
-      resizeObserver.disconnect();
-    };
-  }, [firstName, lastName]);
-
-  return { wrapperRef, firstRef, lastRef, letterSpacing };
-}
 
 const floatingTools = [
   { icon: "/images/hero/icons/chatgpt.svg", label: "ChatGPT", top: "12.6%", left: "50.8%", floatDuration: 3.2, floatDelay: 0 },
@@ -115,7 +24,6 @@ export default function Hero() {
   const handleSectionLink = useSectionLinkClick();
   const [firstName, ...rest] = t.hero.name.split(" ");
   const lastName = rest.join(" ");
-  const { wrapperRef, firstRef, lastRef, letterSpacing } = useJustifiedNameWidths(firstName, lastName);
 
   return (
     <section id="home" data-scroll-snap className="flex min-h-screen flex-col border-b border-hairline">
@@ -128,7 +36,7 @@ export default function Hero() {
               </p>
             </Reveal>
 
-            <div ref={wrapperRef}>
+            <div>
               <Reveal delay={0.05}>
                 <div className="mb-[-0.15em] flex items-center gap-4">
                   <span className="relative block size-[54px] shrink-0 overflow-hidden rounded-full">
@@ -141,21 +49,13 @@ export default function Hero() {
                       className="object-cover"
                     />
                   </span>
-                  <span
-                    ref={firstRef}
-                    style={letterSpacing.first ? { letterSpacing: letterSpacing.first } : undefined}
-                    className="font-display text-[clamp(2.25rem,4.5vw,3.625rem)] leading-[0.9] tracking-tight text-lg-title"
-                  >
+                  <span className="font-display text-[32px] leading-[0.9] tracking-tight text-lg-title md:text-[48px]">
                     {firstName}
                   </span>
                 </div>
               </Reveal>
               <Reveal delay={0.08}>
-                <h1
-                  ref={lastRef}
-                  style={letterSpacing.last ? { letterSpacing: letterSpacing.last } : undefined}
-                  className="font-display text-[clamp(3rem,7vw,5.625rem)] font-normal leading-[0.9] tracking-tight text-lg-subtitle"
-                >
+                <h1 className="font-display text-[61px] font-normal leading-[0.9] tracking-tight text-lg-subtitle md:text-[80px]">
                   {lastName}
                 </h1>
               </Reveal>
@@ -174,7 +74,7 @@ export default function Hero() {
                     handleSectionLink("/#projects")(e);
                     trackEvent("view_projects_click", { location: "hero" });
                   }}
-                  className="flex h-10 items-center rounded-sm bg-blue-300 px-4 text-sm font-medium text-lg-background transition-opacity hover:opacity-85"
+                  className="flex h-10 items-center rounded-sm bg-blue-200 px-4 text-sm font-medium text-lg-background transition-opacity hover:opacity-85"
                 >
                   {t.hero.ctaPrimary}
                 </Link>
@@ -184,7 +84,7 @@ export default function Hero() {
                   target="_blank"
                   rel="noopener noreferrer"
                   onClick={() => trackEvent("cv_click", { location: "hero" })}
-                  className="flex h-10 items-center rounded-sm border border-hairline px-4 text-sm text-lg-subtitle2 transition-colors hover:border-blue-300"
+                  className="flex h-10 items-center rounded-sm border border-hairline bg-white px-4 text-sm text-lg-subtitle2 transition-colors hover:bg-[#F6F8FA]"
                 >
                   {t.hero.ctaSecondary}
                 </a>

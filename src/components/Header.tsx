@@ -1,7 +1,6 @@
 "use client";
 
 import Link from "next/link";
-import Image from "next/image";
 import { useState } from "react";
 import { AnimatePresence, motion, useScroll, useTransform } from "framer-motion";
 import { trackEvent } from "@/lib/analytics";
@@ -139,11 +138,11 @@ function LangToggle({
           trackEvent("language_change", { language: "en" });
         }}
         className={`flex items-center justify-center rounded-full px-3 py-1.5 transition-colors ${
-          locale === "en" ? "bg-white" : ""
+          locale === "en" ? "bg-white" : "hover:bg-[rgba(136,146,156,0.12)]"
         }`}
       >
-        <Image
-          src="/images/header/flag-us.png"
+        <img
+          src="/images/header/flag-us.svg"
           alt=""
           width={24}
           height={16}
@@ -161,11 +160,11 @@ function LangToggle({
           trackEvent("language_change", { language: "pt" });
         }}
         className={`flex items-center justify-center rounded-full px-3 py-1.5 transition-colors ${
-          locale === "pt" ? "bg-white" : ""
+          locale === "pt" ? "bg-white" : "hover:bg-[rgba(136,146,156,0.12)]"
         }`}
       >
-        <Image
-          src="/images/header/flag-br.png"
+        <img
+          src="/images/header/flag-br.svg"
           alt=""
           width={24}
           height={16}

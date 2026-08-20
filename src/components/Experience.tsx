@@ -124,7 +124,7 @@ export default function Experience() {
                 target="_blank"
                 rel="noopener noreferrer"
                 onClick={() => trackEvent("cv_click", { location: "experience" })}
-                className="mt-8 inline-flex h-10 items-center rounded-sm bg-blue-300 px-4 text-sm font-medium text-lg-background transition-opacity hover:opacity-85"
+                className="mt-8 inline-flex h-10 items-center rounded-sm bg-blue-200 px-4 text-sm font-medium text-lg-background transition-opacity hover:opacity-85"
               >
                 {t.hero.ctaSecondary}
               </a>
