@@ -5,6 +5,7 @@ import "./globals.css";
 import { LocaleProvider } from "@/lib/locale-context";
 import SmoothScroll from "@/components/SmoothScroll";
 import Cursor from "@/components/Cursor";
+import Preloader from "@/components/Preloader";
 import Header from "@/components/Header";
 import ContactFooter from "@/components/ContactFooter";
 import PageTransition from "@/components/PageTransition";
@@ -67,6 +68,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         <LocaleProvider>
           <Cursor />
           <SmoothScroll>
+            <Preloader />
             <Header />
             <PageTransition>{children}</PageTransition>
             <ContactFooter />

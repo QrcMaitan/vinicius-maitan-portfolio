@@ -66,6 +66,20 @@
   box-sizing: border-box;
 }
 
+html {
+  scrollbar-gutter: stable;
+  background: var(--lg-background);
+}
+
+html.preloader-active {
+  background: var(--dk-background);
+  scrollbar-color: var(--dk-background) var(--dk-background);
+}
+
+html.preloader-active::-webkit-scrollbar-track {
+  background: var(--dk-background);
+}
+
 img {
   -webkit-user-drag: none;
   user-drag: none;
