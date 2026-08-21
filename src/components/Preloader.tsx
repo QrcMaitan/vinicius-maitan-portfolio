@@ -4,7 +4,7 @@ import { AnimatePresence, motion, type Variants } from "framer-motion";
 import { useEffect, useState } from "react";
 import { useLenis } from "./SmoothScroll";
 
-const DISPLAY_MS = 2200;
+const DISPLAY_MS = 1800;
 const EASE_IN_OUT = [0.7, 0, 0.25, 1] as const;
 const WORD = "Maitan";
 const DRIFT_START = "25vh";
@@ -17,13 +17,13 @@ const wordContainer: Variants = {
     transition: {
       delayChildren: 0.5,
       staggerChildren: 0.09,
-      y: { duration: DISPLAY_MS / 1000, ease: "linear" },
+      y: { duration: (DISPLAY_MS / 1000) * 1.6, ease: "linear" },
     },
   },
 };
 
 const letterVariant: Variants = {
-  hidden: { y: 64, opacity: 0 },
+  hidden: { y: 130, opacity: 0 },
   visible: {
     y: 0,
     opacity: 1,
