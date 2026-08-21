@@ -4,7 +4,9 @@ import { AnimatePresence, motion, type Variants } from "framer-motion";
 import { useEffect, useState } from "react";
 import { useLenis } from "./SmoothScroll";
 
-const DISPLAY_MS = 1800;
+export const DISPLAY_MS = 1800;
+const OVERLAY_EXIT_S = 0.9;
+export const PRELOADER_TOTAL_MS = DISPLAY_MS + OVERLAY_EXIT_S * 1000;
 const EASE_IN_OUT = [0.7, 0, 0.25, 1] as const;
 const WORD = "Maitan";
 const DRIFT_START = "25vh";
@@ -70,7 +72,7 @@ export default function Preloader() {
           className="fixed inset-0 z-[100] flex items-center justify-center bg-dk-background"
           initial={{ y: 0 }}
           exit={{ y: "-100%" }}
-          transition={{ duration: 0.9, ease: EASE_IN_OUT }}
+          transition={{ duration: OVERLAY_EXIT_S, ease: EASE_IN_OUT }}
         >
           <motion.span
             className="font-display text-[36px] leading-[0.9] tracking-tight text-dk-title md:text-[56px]"

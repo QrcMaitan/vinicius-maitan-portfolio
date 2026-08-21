@@ -2,11 +2,14 @@
 
 import Image from "next/image";
 import Link from "next/link";
+import { motion } from "framer-motion";
+import { useEffect, useState } from "react";
 import { trackEvent } from "@/lib/analytics";
 import { useLocale } from "@/lib/locale-context";
 import { useSectionLinkClick } from "@/lib/use-section-link";
 import Reveal from "./Reveal";
 import ToolsMarquee from "./ToolsMarquee";
+import { PRELOADER_TOTAL_MS } from "./Preloader";
 
 const floatingTools = [
   { icon: "/images/hero/icons/chatgpt.svg", label: "ChatGPT", top: "12.6%", left: "50.8%", floatDuration: 3.2, floatDelay: 0 },
@@ -24,6 +27,12 @@ export default function Hero() {
   const handleSectionLink = useSectionLinkClick();
   const [firstName, ...rest] = t.hero.name.split(" ");
   const lastName = rest.join(" ");
+  const [handRevealed, setHandRevealed] = useState(false);
+
+  useEffect(() => {
+    const timer = setTimeout(() => setHandRevealed(true), PRELOADER_TOTAL_MS - 500);
+    return () => clearTimeout(timer);
+  }, []);
 
   return (
     <section id="home" data-scroll-snap className="flex min-h-screen flex-col border-b border-hairline">
@@ -101,15 +110,21 @@ export default function Hero() {
                 "radial-gradient(120% 100% at 50% 45%, var(--lg-background2) 0%, var(--lg-divider) 100%)",
             }}
           />
-          <Image
-            src="/images/hero/hands.png"
-            alt="Hands raised toward light, symbolizing the collaboration between design craft and AI tools"
-            fill
-            sizes="(min-width: 768px) 50vw, 100vw"
-            draggable={false}
-            className="object-cover opacity-80"
-            priority
-          />
+          <motion.div
+            className="absolute inset-0"
+            animate={{ y: handRevealed ? 0 : 88 }}
+            transition={{ duration: 5, ease: [0.22, 1, 0.36, 1] }}
+          >
+            <Image
+              src="/images/hero/hands.png"
+              alt="Hands raised toward light, symbolizing the collaboration between design craft and AI tools"
+              fill
+              sizes="(min-width: 768px) 50vw, 100vw"
+              draggable={false}
+              className="object-cover opacity-80"
+              priority
+            />
+          </motion.div>
           <div className="pointer-events-none absolute inset-0 hidden md:block">
             {floatingTools.map((tool) => (
               <span
