@@ -23,10 +23,11 @@ const wordContainer: Variants = {
 };
 
 const letterVariant: Variants = {
-  hidden: { y: 130, opacity: 0 },
+  hidden: { y: 220, opacity: 0, filter: "blur(8px)" },
   visible: {
     y: 0,
     opacity: 1,
+    filter: "blur(0px)",
     transition: { type: "spring", stiffness: 260, damping: 24, mass: 0.9 },
   },
 };
